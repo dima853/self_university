@@ -72,10 +72,10 @@ public class User {
 2. **Does not differ from other static methods**
    - They are not highlighted as constructors in the documentation
 - Solution: use common names:
-     - `valueOf' - conversion (usually returns the same type)
+     - `valueOf` - conversion (usually returns the same type)
 - `of` - compact alternative to valueOf (EnumSet)
-     - `getInstance' - returns an instance, possibly with parameters
-     - `newInstance' - guarantees a new instance
+     - `getInstance` - returns an instance, possibly with parameters
+     - `newInstance` - guarantees a new instance
      - `GetType`/`newType' - when the method is in another class
 
 ## Advanced examples
@@ -220,7 +220,7 @@ public class TreeFactory {
 ```
 
 ### **4. Client (Forest)**
-``java
+```java
 import java.util.ArrayList;
 import java.util.List;
 
@@ -258,7 +258,7 @@ public class Main {
 ```
 
 **Output:**
-``
+```
 A new Flyweight has been created: Oak
 A new Flyweight has been created: Pine
 Draw an Oak tree (texture_Dub.png) in (10, 20)
