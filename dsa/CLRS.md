@@ -16,7 +16,7 @@ Here is the full table of contents of the book **"Introduction to Algorithms" (C
 2.3.1 The Divide and Conquer method  
 2.3.2 Analysis of recurrence relations (Recurrence Analysis)  
 
-### **3. Growth of Functions*
+### **3. Growth of Functions**
 3.1 Asymptotic Notation
 3.2 Standard functions and notation  
 
