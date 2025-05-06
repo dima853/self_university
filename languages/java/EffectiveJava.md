@@ -12,6 +12,7 @@ Here is the **full table of contents** of the book **"Effective Java" (3rd Editi
 
 ## **Chapter 2. Creation and destruction of objects**  
 ### **Item 1:** Use static factory methods instead of constructors  
+- https://github.com/dima853/self_university/tree/main/languages/java/projects/EffectiveJava/item1
 ### **Item 2:** Consider the Builder with a large number of constructor parameters  
 ### **Item 3:** Implement Singleton with enum or private constructor  
 ### **Item 4:** Prohibit the creation of instances with a private constructor  
