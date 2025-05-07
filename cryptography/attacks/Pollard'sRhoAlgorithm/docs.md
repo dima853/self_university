@@ -232,9 +232,7 @@ Alice wants to receive encrypted messages. She:
    - `q = 104729`  
 
 2. **Calculates the module `n`:**  
-   \[
-   n = p \times q = 104723 \times 104729 = 10\,966\,061\,467
-   \]  
+   ![alt text](image.png) 
 
 3. **Calculates the Euler function `φ(n)`:**  
    \[
