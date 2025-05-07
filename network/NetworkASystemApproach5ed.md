@@ -24,6 +24,7 @@ Here's the **detailed table of contents** from *Computer Networks: A Systems App
 ## **Part 2: Internetworking**
 ### **Chapter 3: Internetworking**
 - 3.1 Switching and Forwarding (CIDR, Longest Prefix Match)  
+   -  [Beej’s Guide to Network Programming](https://beej.us/guide/bgnet/pdf/bgnet_usl_c_1.pdf)
 - 3.2 Internet Protocol (IPv4, IPv6, Subnetting)  
 - 3.3 Routing (RIP, OSPF, BGP)  
 - 3.4 Multicast  
