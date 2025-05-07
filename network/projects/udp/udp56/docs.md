@@ -21,28 +21,28 @@
 
 **2) DNS query generation:**  
 - **Headline:**
-- `ID' (unique identifier).  
-  - `Flags' (RD=1 for recursion, Opcode, other flags).  
-  - 'QDCOUNT = 1' (one question).  
+- `ID` (unique identifier).  
+  - `Flags` (RD=1 for recursion, Opcode, other flags).  
+  - `QDCOUNT` = 1' (one question).  
 - **Question Section:**
-- 'QNAME' (domain in a special format, e.g. `3www6google3com0`).  
-  - 'QTYPE' (A, AAAA, MX, etc.).
+- `QNAME` (domain in a special format, e.g. `3www6google3com0`).  
+  - `QTYPE` (A, AAAA, MX, etc.).
 - `QCLASS' (usually `IN`).  
 
 **3) Sending/receiving data:**  
 - `sendto()` — sending a request.  
-- `recvfrom()' — receiving a response (max 512 bytes for UDP).  
+- `recvfrom()` — receiving a response (max 512 bytes for UDP).  
 
 **4) Response parsing:**  
-- Checking the `ID' (must match the request).  
+- Checking the `ID` (must match the request).  
 - RCODE analysis (0 = OK, 3 = NXDOMAIN, etc.).
 - Data extraction from sections:  
-  - `Answer' (IP address).  
-  - `Authority' (name servers).  
+  - `Answer` (IP address).  
+  - `Authority` (name servers).  
   - `Additional` (additional data).  
 
 **5) Error handling:**  
-- Timeouts (`recvfrom()` with `SO_RCVTIMEO').  
+- Timeouts (`recvfrom()` with `SO_RCVTIMEO`).  
 - Check the `TC=1` flag (TCP is needed for large responses).  
 - Repeat requests if necessary.  
 
