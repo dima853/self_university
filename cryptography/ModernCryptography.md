@@ -1,7 +1,3 @@
-Here is the **full table of contents** of the book **"Introduction to Modern Cryptography" (3rd Edition, Jonathan Katz & Yehuda Lindell)** in a structured and designed way:
-
----
-
 # **Introduction to Modern Cryptography (3rd Ed.) – Full table of contents**  
 
 ## **Part I: Introduction and Classical Cryptography**  
@@ -110,4 +106,3 @@ Here is the **full table of contents** of the book **"Introduction to Modern Cry
 - **Practical focus**: Analysis of real circuits (AES, RSA, ECC, TLS).  
 - **Current topics**: Post-quantum cryptography, FHE, MPC.  
 
-If you want, I can offer **additional materials** on specific chapters (for example, Python implementations or practice tasks). Which section is most interesting to you?
