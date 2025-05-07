@@ -29,6 +29,7 @@
     *   Defining Computationally Secure Encryption
         *   The Basic Definition of Security (EAV-Security)
         *   \*Semantic Security
+        -  https://mit6875.github.io/PAPERS/probabilistic_encryption.pdf
     *   Constructing an EAV-Secure Encryption Scheme
         *   Pseudorandom Generators
         *   Proofs by Reduction
