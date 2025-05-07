@@ -146,6 +146,7 @@ Here is the full table of contents of the book **"Introduction to Algorithms" (C
 ### **26. Computational geometry**  
 ### **27. NP-completeness**  
 -  https://theory.cs.princeton.edu/complexity/book.pdf
+    -  [Travelling Salesman Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
 ### **28. Algorithms for parallel computing**  
 ### **29. Linear programming**  
 
