@@ -98,14 +98,14 @@ If `p-1` has **small divisors**, the algorithm runs faster.
 - **Protection:** Use **large prime numbers** and **curves with good properties**.
 
 
-Let's look at ** a real example of hacking RSA** using Pollard's Rho.  
+# Let's look at ** a real example of hacking RSA** using Pollard's Rho.  
 
 ---
 
 ## **🔹 Step 1: Generate a "weak" RSA key (for demonstration)**
 Let's say Alice chose two **primes** for RSA:
 - `p = 104729` (this is a prime)  
-- `q = 104723' (also simple)  
+- `q = 104723` (also simple)  
 
 She calculates:  
 - `n = p * q = 104729 * 104723 = 10 966 061 467`  
@@ -123,7 +123,7 @@ Bob intercepts the public key `(n, e)` and wants to find `p` and `q` to calculat
 
 ### **🔸 1. Run Pollard's Rho to factorize `n`**
 In the code from the previous example, we do:
-``c
+```c
 long long n = 10966061467LL;
 long long factor = pollards_rho(n);
 ```
@@ -136,22 +136,46 @@ long long factor = pollards_rho(n);
 - `d = e⁻¹ mod φ(n) = 65537⁻¹ mod 10 965 852 016`  
 
 We calculate the inverse element using the **extended Euclidean algorithm**:  
-```python
-def modinv(a, m):
-    g, x, y = extended_gcd(a, m)
-    if g != 1:
-return None # There is no reverse
-    else:
-        return x % m
+```c
+long long extended_gcd(long long a, long long b, long long *x, long long *y) {
+    if (b == 0) {
+        *x = 1;
+        *y = 0;
+        return a;
+    }
 
-def extended_gcd(a, b):
-    if b == 0:
-        return (a, 1, 0)
-    else:
-        g, x, y = extended_gcd(b, a % b)
-        return (g, y, x - (a // b) * y)
+    long long x1, y1;
+    long long g = extended_gcd(b, a % b, &x1, &y1);
 
-d = modinv(65537, 10965852016)
+    *x = y1;
+    *y = x1 - (a / b) * y1;
+
+    return g;
+}
+
+// A function for calculating the modular inverse
+long long coding(long long a, long long m) {
+    long long x, y;
+    long long g = extended_gcd(a, m, &x, &y);
+
+    if (g != 1) {
+        return -1; // There is no reverse
+    } else {
+        return (x % m + m) % m; // Make sure that the result is positive
+    }
+}
+
+int main() {
+    long long d = modinv(65537, 10965852016);
+
+    if (d == -1) {
+        printf("The modular inverse does not exist\n");
+    } else {
+        printf("Modular inverse: %lld\n", d);
+    }
+
+    return 0;
+}
 ```
 **Result:**  
 `d = 3 365 031 713`  
