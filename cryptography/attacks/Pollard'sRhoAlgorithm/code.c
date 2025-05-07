@@ -29,10 +29,10 @@ long long pollards_rho(long long n) {
 
     while (1) {
         // Choose a random c (usually from 1 to n-1)
-c = rand() % (n - 1) + 1;
+        c = rand() % (n - 1) + 1;
 
         // Initialization of "turtle" (x) and "hare" (y)
-x = rand() % (n - 1) + 1;
+        x = rand() % (n - 1) + 1;
         y = x;
 
         do {
