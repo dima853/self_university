@@ -31,22 +31,22 @@ If you select **primes close to each other** or **one of them is small** in RSA,
 ### **The discrete logarithm problem in ECC**
 - **Given:**
 Is the point `G` (generator).  
-  - Public point `Q = k * G' (where `k` is the secret key).  
+  - Public point `Q = k * G` (where `k` is the secret key).  
 - **Goal:** Find `k'.  
 
 ### **Pollard's Rho for ECC**
 The algorithm is adapted to **search for collisions** in sequences of points:  
 1. **We generate a "turtle" and a "hare"** in a group of points.  
 2. **We are looking for a collision** of the form:
-``
+```
    a₁ * G + b₁ * Q = a₂ * G + b₂ * Q
    ```  
    Then:
-``
+```
 (A₁ - a₂) * G = (b₂ - b₁) * Q = (b₂ - b₁) * k * G
    ```  
    From here:
-``
+```
    k ≡ (a₁ - a₂) / (b₂ - b₁) mod group_order
    ```  
 
