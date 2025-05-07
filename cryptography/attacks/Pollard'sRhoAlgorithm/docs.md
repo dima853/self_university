@@ -278,7 +278,8 @@ Alice receives a `c` and wants to read the original message.
 ** Why does it work?**  
 Because of **Euler's theorem**:
 ![alt text](image-8.png)
-Since `![alt text](image-12.png)`, then:
+
+Since ![alt text](image-12.png), then:
 ![alt text](image-9.png)
 
 ---
