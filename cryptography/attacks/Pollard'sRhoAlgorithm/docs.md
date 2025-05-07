@@ -235,22 +235,16 @@ Alice wants to receive encrypted messages. She:
    ![alt text](image.png) 
 
 3. **Calculates the Euler function `φ(n)`:**  
-   \[
-   \phi(n) = (p-1)(q-1) = 104722 \times 104728 = 10\,965\,852\,016
-   \]  
+   ![alt text](image-1.png) 
 
 4. **Selects the open exponent `e`:**
 - They usually take `e = 65537` (because it's simple and not too big).  
    - Must be mutually simple with `φ(n)`, that is:
-\[
-     \gcd(e, \phi(n)) = 1
-     \]  
+![alt text](image-2.png)
 
 5. **Calculates the secret exponent `d`:**
 - `d` is **the inverse of `e` modulo `φ(n)`**, that is:
-\[
-     d\times e\equiv 1\mod\phi(n)
-\]
+![alt text](image-3.png)
 - Is found via the **extended Euclidean algorithm**.  
 
 **The result:**  
@@ -260,17 +254,13 @@ Alice wants to receive encrypted messages. She:
 ---
 
 ### **2. Message encryption**
-Bob wants to send Alice the number `m' (for example, `m = 123456789').  
+Bob wants to send Alice the number `m` (for example, `m = 123456789`).  
 
 1. **Takes Alice's public key `(n, e)`.**  
 2. **Calculates the ciphertext `c`:**  
-   \[
-   c = m^e \mod n
-   \]  
+![alt text](image-4.png)
    For example:
-\[
-c = 123456789^{65537} \mod 10\,966\,061\,467
-\]  
+![alt text](image-5.png)
 
 3. **Sends 'c` to Alice.**  
 
@@ -281,23 +271,15 @@ Alice receives a `c` and wants to read the original message.
 
 1. **Takes his private key `(n, d)`.**  
 2. **Calculates the original message `m`:**  
-   \[
-   m = c^d \mod n
-   \]  
+![alt text](image-6.png)
    For example:
-\[
-   m = c^{3\,365\,031\,713} \mod 10\,966\,061\,467
-   \]  
+![alt text](image-7.png)
 
 ** Why does it work?**  
 Because of **Euler's theorem**:
-\[
-m^{\phi(n)}\equiv 1\mod n
-\]  
-Since `d\times e\equiv 1\mod\phi(n)`, then:
-\[
-c^d\equiv(m^e)^d \equiv m^{e \times d} \equiv m^{1 + k \times \phi(n)} \equiv m \times (m^{\phi(n)})^k \equiv m \times 1^k \equiv m \mod n
-\]  
+![alt text](image-8.png)
+Since `![alt text](image-12.png)`, then:
+![alt text](image-9.png)
 
 ---
 
@@ -306,15 +288,11 @@ RSA is also used for **message signing**.
 
 1. **Alice wants to sign the message with `m`.**  
 2. **It calculates the signature `s`:**  
-   \[
-   s = m^d \mod n
-   \]  
+![alt text](image-10.png)
 3. **Sends `(m, s)` to Bob.**  
 
 4. **Bob verifies the signature:**  
-   \[
-   m' = s^e \mod n
-   \]
+![alt text](image-11.png)
 - If `m' == m`, then the signature is correct.  
 
 ---
