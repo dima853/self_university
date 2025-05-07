@@ -145,11 +145,7 @@ Here is the full table of contents of the book **"Introduction to Algorithms" (C
 ### **25. Multithreaded algorithms**  
 ### **26. Computational geometry**  
 ### **27. NP-completeness**  
+-  https://theory.cs.princeton.edu/complexity/book.pdf
 ### **28. Algorithms for parallel computing**  
 ### **29. Linear programming**  
 
----
-
-This is a **complete list of topics** from CLRS. If you want, I can break it down into **years of study** at your university or offer **additional materials** on each topic. 🚀  
-
-Which section is most interesting to you?
