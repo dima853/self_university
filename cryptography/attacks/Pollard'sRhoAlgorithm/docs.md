@@ -210,3 +210,137 @@ Let's say Alice encrypted the message `m = 123456789` and sent it to Bob:
 - **Pollard's Rho** is a dangerous tool if the RSA keys are **weak**.  
 - In reality, for `n=2048 bits` it is **useless**, but for `n=256 bits` it can crack the key in minutes.  
 - **Always use recommended standards (NIST, RFC) when generating keys!**
+
+---
+---
+
+### **🔐 What is RSA?**
+RSA is an **asymmetric cryptographic algorithm** that is used to:  
+- **Encryption** (for example, for secure data transmission).  
+- **Digital signatures** (verification of the authorship of the message).  
+
+It is based on the complexity **of factoring large numbers** (factorization).  
+
+---
+
+## **🔹 How does RSA work (no code, just math)?**
+### **1. Key generation**
+Alice wants to receive encrypted messages. She:  
+
+1. **Selects two large prime numbers** `p` and `q' (for example, 1024 bits each).  
+   - `p = 104723`  
+   - `q = 104729`  
+
+2. **Calculates the module `n`:**  
+   \[
+   n = p \times q = 104723 \times 104729 = 10\,966\,061\,467
+   \]  
+
+3. **Calculates the Euler function `φ(n)`:**  
+   \[
+   \phi(n) = (p-1)(q-1) = 104722 \times 104728 = 10\,965\,852\,016
+   \]  
+
+4. **Selects the open exponent `e`:**
+- They usually take `e = 65537` (because it's simple and not too big).  
+   - Must be mutually simple with `φ(n)`, that is:
+\[
+     \gcd(e, \phi(n)) = 1
+     \]  
+
+5. **Calculates the secret exponent `d`:**
+- `d` is **the inverse of `e` modulo `φ(n)`**, that is:
+\[
+     d\times e\equiv 1\mod\phi(n)
+\]
+- Is found via the **extended Euclidean algorithm**.  
+
+**The result:**  
+- **Public key (for encryption):** `(n, e)`  
+- **Private key (for decryption):** `(n, d)`  
+
+---
+
+### **2. Message encryption**
+Bob wants to send Alice the number `m' (for example, `m = 123456789').  
+
+1. **Takes Alice's public key `(n, e)`.**  
+2. **Calculates the ciphertext `c`:**  
+   \[
+   c = m^e \mod n
+   \]  
+   For example:
+\[
+c = 123456789^{65537} \mod 10\,966\,061\,467
+\]  
+
+3. **Sends 'c` to Alice.**  
+
+---
+
+### **3. Decryption of the message**
+Alice receives a `c` and wants to read the original message.  
+
+1. **Takes his private key `(n, d)`.**  
+2. **Calculates the original message `m`:**  
+   \[
+   m = c^d \mod n
+   \]  
+   For example:
+\[
+   m = c^{3\,365\,031\,713} \mod 10\,966\,061\,467
+   \]  
+
+** Why does it work?**  
+Because of **Euler's theorem**:
+\[
+m^{\phi(n)}\equiv 1\mod n
+\]  
+Since `d\times e\equiv 1\mod\phi(n)`, then:
+\[
+c^d\equiv(m^e)^d \equiv m^{e \times d} \equiv m^{1 + k \times \phi(n)} \equiv m \times (m^{\phi(n)})^k \equiv m \times 1^k \equiv m \mod n
+\]  
+
+---
+
+### **4. Digital signature**
+RSA is also used for **message signing**.  
+
+1. **Alice wants to sign the message with `m`.**  
+2. **It calculates the signature `s`:**  
+   \[
+   s = m^d \mod n
+   \]  
+3. **Sends `(m, s)` to Bob.**  
+
+4. **Bob verifies the signature:**  
+   \[
+   m' = s^e \mod n
+   \]
+- If `m' == m`, then the signature is correct.  
+
+---
+
+## **🔹 Why is RSA secure?**
+- **The basis of security:** It is very difficult to decompose `n` into `p` and `q` (if they are large enough).  
+- **Best Attacks:**
+- **Pollard's Rho** (if `p` or `q` are small).  
+  - **Quadratic sieve method** or **NFS** (for large `n`).  
+- **Recommended size `n`:** **2048 bits or more** (otherwise it can be hacked).  
+
+---
+
+## **🔹 Where is RSA used?**
+1. **SSL/TLS** (Internet connection protection).  
+2. **PGP/GPG** (mail encryption).  
+3. **Digital signatures** (documents, software).
+4. **VPN, SSH, Bitcoin** (in some cases).  
+
+---
+
+## **🔹 Conclusion**
+- **RSA** is an **asymmetric algorithm** based on factorization.  
+- **Public key `(n, e)`** — for encryption.  
+- **Private key `(n, d)`** — for decryption.  
+- **Security depends on the size of `n`** (minimum 2048 bits).  
+- **Can be hacked** if `p` and `q` are poorly chosen (e.g. Pollard's Rho).
