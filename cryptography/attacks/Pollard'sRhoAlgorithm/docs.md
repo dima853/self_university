@@ -96,3 +96,93 @@ If `p-1` has **small divisors**, the algorithm runs faster.
 - **Pollard's Rho** is a powerful tool for **factorization** and **discrete logarithm**.  
 - It is used for attacks on **RSA, ECC, DSA, ElGamal** if the parameters are selected **insufficiently secure**.  
 - **Protection:** Use **large prime numbers** and **curves with good properties**.
+
+
+Let's look at ** a real example of hacking RSA** using Pollard's Rho.  
+
+---
+
+## **🔹 Step 1: Generate a "weak" RSA key (for demonstration)**
+Let's say Alice chose two **primes** for RSA:
+- `p = 104729` (this is a prime)  
+- `q = 104723' (also simple)  
+
+She calculates:  
+- `n = p * q = 104729 * 104723 = 10 966 061 467`  
+- `φ(n) = (p-1)(q-1) = 104728 * 104722 = 10 965 852 016`  
+- Selects `e = 65537' (standard open exponent)  
+- Calculates `d = e⁻1 mod φ(n) = 65537-1 mod 10 965 852 016`  
+
+**Public key:** `(n=10 966 061 467, e=65537)`  
+**Private key:** `d = ...` (we don't know yet)  
+
+---
+
+## **🔹 Step 2: Bob's Attack (hacking through Pollard's Rho)**
+Bob intercepts the public key `(n, e)` and wants to find `p` and `q` to calculate `d'.  
+
+### **🔸 1. Run Pollard's Rho to factorize `n`**
+In the code from the previous example, we do:
+``c
+long long n = 10966061467LL;
+long long factor = pollards_rho(n);
+```
+**Result:**  
+- The algorithm finds the divisor of `p = 104723` (or `104729`).  
+- Now `q = n / p = 10966061467 / 104723 = 104729'.  
+
+### **🔸 2. We calculate `φ(n)` and the secret key `d`**
+- `φ(n) = (p-1)(q-1) = 104722 * 104728 = 10 965 852 016`  
+- `d = e⁻¹ mod φ(n) = 65537⁻¹ mod 10 965 852 016`  
+
+We calculate the inverse element using the **extended Euclidean algorithm**:  
+```python
+def modinv(a, m):
+    g, x, y = extended_gcd(a, m)
+    if g != 1:
+return None # There is no reverse
+    else:
+        return x % m
+
+def extended_gcd(a, b):
+    if b == 0:
+        return (a, 1, 0)
+    else:
+        g, x, y = extended_gcd(b, a % b)
+        return (g, y, x - (a // b) * y)
+
+d = modinv(65537, 10965852016)
+```
+**Result:**  
+`d = 3 365 031 713`  
+
+---
+
+## **🔹 Step 3: Bob decrypts the message**
+Let's say Alice encrypted the message `m = 123456789` and sent it to Bob:  
+`c = mᵉ mod n = 123456789⁶⁵⁵³⁷ mod 10 966 061 467`  
+
+**Bob calculates:**  
+`m = cᵈ mod n = c³ ³⁶⁵ ⁰³¹ ⁷¹³ mod 10 966 061 467`  
+
+**And receives the original message `m = 123456789'!**  
+
+---
+
+## **🔹 Why did it work?**
+- Pollard's Rho quickly found the divisors of `n` because `p` and `q` **are not big enough** (only 6-digit).  
+- In real life, `p` and `q` should be **1024-4096 bits** (300+ digits), and then the algorithm will work **for millions of years**.  
+
+---
+
+## **🔹 How to protect yourself?**
+1. **Use large prime numbers** (2048+ bits).  
+2. **Check that `p` and `q` are far from each other** (so that it cannot be factorized via Fermat).  
+3. **Do not use "bad" cryptographic libraries** that generate weak keys.  
+
+---
+
+## **Conclusion**
+- **Pollard's Rho** is a dangerous tool if the RSA keys are **weak**.  
+- In reality, for `n=2048 bits` it is **useless**, but for `n=256 bits` it can crack the key in minutes.  
+- **Always use recommended standards (NIST, RFC) when generating keys!**
