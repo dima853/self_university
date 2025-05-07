@@ -16,7 +16,7 @@
 int main() {
 // 2. Creating a UDP socket
     int sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); // Fixed: it was IPPROTO_UPD
-if (sockfd < 0) {
+    if (sockfd < 0) {
         perror("Socket creation failed");
         return 1;
     }
