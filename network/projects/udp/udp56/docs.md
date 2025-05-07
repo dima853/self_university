@@ -89,12 +89,12 @@ This framework describes the **basic framework** for implementing a DNS client. 
     * **Number of questions (Question Count):** Is set to 1 (usually a DNS query contains one question).
     * **Number of answers (Answer Count), Number of authoritative records (Authority Count), Number of additional records (Additional Count):** Set to 0 for the query.
     * **Question:** Contains information about what we want to know:
-        * **Domain Name (Query Name):** The domain name that we want to resolve to an IP address (for example, `google.com `). A domain name is represented as a sequence of labels, each of which begins with a byte indicating the length of the label. For example, `google.com `will be encoded as `\x06google\x03com\x00`.
+        * **Domain Name (Query Name):** The domain name that we want to resolve to an IP address (for example, `google.com`). A domain name is represented as a sequence of labels, each of which begins with a byte indicating the length of the label. For example, `google.com `will be encoded as `\x06google\x03com\x00`.
         * **Query Type:** The type of DNS record we want to get. The most common types are:
             * `A` (Address record): Request for an IPv4 address.
-            * `AAAA' (Quad-A record): IPv6 address request.
-            * `MX' (Mail Exchange record): Request information about the mail server.
-            * `CNAME' (Canonical Name record): Request for the canonical domain name.
+            * `AAAA` (Quad-A record): IPv6 address request.
+            * `MX` (Mail Exchange record): Request information about the mail server.
+            * `CNAME` (Canonical Name record): Request for the canonical domain name.
         * **Query Class:** It is usually set to `IN' (Internet).
 
 2. **Formation of a UDP packet:**
