@@ -17,17 +17,17 @@
 **1) Network Layer (UDP):**  
 - Creating a socket (`socket()`).
 - Binding to a port (optional for the client).  
-- Setting timeouts ('setsockopt()').  
+- Setting timeouts (`setsockopt()`).  
 
 **2) DNS query generation:**  
 - **Headline:**
 - `ID` (unique identifier).  
   - `Flags` (RD=1 for recursion, Opcode, other flags).  
-  - `QDCOUNT` = 1' (one question).  
+  - `QDCOUNT` = `1` (one question).  
 - **Question Section:**
 - `QNAME` (domain in a special format, e.g. `3www6google3com0`).  
   - `QTYPE` (A, AAAA, MX, etc.).
-- `QCLASS' (usually `IN`).  
+- `QCLASS` (usually `IN`).  
 
 **3) Sending/receiving data:**  
 - `sendto()` — sending a request.  
