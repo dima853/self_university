@@ -119,7 +119,7 @@ Number of additional entries: 0
 Domain name: \x06google\x03com\x00
 Request type: A (1)
 Request class: IN (1)
-``
+```
 
 **Code with `setsockopt' and timeout:**
 
