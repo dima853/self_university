@@ -1,108 +1,265 @@
-# **Introduction to Modern Cryptography (3rd Ed.) – Full table of contents**  
+**I. Introduction and Classical Cryptography**
 
-## **Part I: Introduction and Classical Cryptography**  
-### **Chapter 1: Introduction**  
-1.1 Cryptography and Modern Communication  
-1.2 The Setting of Private-Key Encryption  
-1.3 Historical Ciphers and Their Cryptanalysis  
-1.4 Principles of Modern Cryptography  
+1.  Introduction
+    *   Cryptography and Modern Cryptography
+    *   The Setting of Private-Key Encryption
+    *   Historical Ciphers and Their Cryptanalysis
+    *   Principles of Modern Cryptography
+        *   Principle 1 – Formal Definitions
+        *   Principle 2 – Precise Assumptions
+        *   Principle 3 – Proofs of Security
+        *   Provable Security and Real-World Security
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 2: Perfectly Secret Encryption**  
-2.1 Definitions and Basic Properties  
-2.2 The One-Time Pad  
-2.3 Limitations of Perfect Secrecy  
-2.4 Shannon’s Theorem  
+2.  Perfectly Secret Encryption
+    *   Definitions
+    *   The One-Time Pad
+    *   Limitations of Perfect Secrecy
+    *   \*Shannon’s Theorem
+    *   References and Additional Reading
+    *   Exercises
 
----
+**II. Private-Key (Symmetric) Cryptography**
 
-## **Part II: Private-Key (Symmetric) Cryptography**  
-### **Chapter 3: Private-Key Encryption**  
-3.1 Computational Security  
-3.2 Pseudorandomness and Stream Ciphers  
-3.3 Security Against Chosen-Plaintext Attacks (CPA)  
-3.4 Block Ciphers and Modes of Operation  
-3.5 Security Against Chosen-Ciphertext Attacks (CCA)  
+3.  Private-Key Encryption
+    *   Computational Security
+        *   The Concrete Approach
+        *   The Asymptotic Approach
+    *   Defining Computationally Secure Encryption
+        *   The Basic Definition of Security (EAV-Security)
+        *   \*Semantic Security
+    *   Constructing an EAV-Secure Encryption Scheme
+        *   Pseudorandom Generators
+        *   Proofs by Reduction
+        *   EAV-Security from a Pseudorandom Generator
 
-### **Chapter 4: Message Authentication Codes (MACs)**  
-4.1 Definitions and Basic Properties  
-4.2 Constructing Secure MACs  
-4.3 CBC-MAC and HMAC  
-4.4 Authenticated Encryption  
+4.  Message Authentication Codes
+    *   Message Integrity
+        *   Secrecy vs. Integrity
+        *   Encryption vs. Message Authentication
+    *   Message Authentication Codes (MACs) – Definitions
+    *   Constructing Secure Message Authentication Codes
+        *   A Fixed-Length MAC
+        *   Domain Extension for MACs
+    *   CBC-MAC
+        *   The Basic Construction
+        *   \*Proof of Security
+    *   GMAC and Poly1305
+    *   MACs from Difference-Universal Functions
+    *   Instantiations
+    *   \*Information-Theoretic MACs
+        *   One-Time MACs from Strongly Universal Functions
+        *   One-Time MACs from Difference-Universal Functions
+    *   Limitations on Information-Theoretic MACs
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 5: Hash Functions and Applications**  
-5.1 Definitions and Security Requirements  
-5.2 The Merkle-Damgård Transform  
-5.3 Hash Functions Based on Block Ciphers  
-5.4 Applications: Password Hashing, Key Derivation  
+5.  CCA-Security and Authenticated Encryption
+    *   Chosen-Ciphertext Attacks and CCA-Security
+        *   Padding-Oracle Attacks
+        *   Defining CCA-Security
+    *   Authenticated Encryption
+    *   CCA-Security vs. Authenticated Encryption
+    *   Authenticated Encryption Schemes
+        *   Generic Constructions
 
-### **Chapter 6: Practical Constructions of Symmetric-Key Primitives**  
-6.1 Block Ciphers: Feistel Networks, DES, AES  
-6.2 Theoretical Constructions: Pseudorandom Permutations  
-6.3 Compression Functions and SHA-3  
+6.  Hash Functions and Applications
+    *   Definitions
+        *   Collision Resistance
+        *   Weaker Notions of Security
+    *   Domain Extension: The Merkle-Damgard Transform
+    *   Message Authentication Using Hash Functions
+        *   Hash-and-MAC
+        *   HMAC
+    *   Generic Attacks on Hash Functions
+        *   Birthday Attacks for Finding Collisions
+        *   Small-Space Birthday Attacks
+        *   \*Time/Space Tradeoffs for Inverting Hash Functions
+    *   The Random-Oracle Model
+        *   The Random-Oracle Model in Detail
+        *   Is the Random-Oracle Methodology Sound?
+    *   Additional Applications of Hash Functions
+        *   Fingerprinting and Deduplication
+        *   Merkle Trees
+        *   Password Hashing
+        *   Key Derivation
+        *   Commitment Schemes
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 7: Theoretical Constructions of Symmetric-Key Primitives**  
-7.1 One-Way Functions  
-7.2 Pseudorandom Generators (PRGs)  
-7.3 Pseudorandom Functions (PRFs) and Permutations (PRPs)  
+7.  Practical Constructions of Symmetric-Key Primitives
+    *   Stream Ciphers
+        *   Linear-Feedback Shift Registers
+        *   Adding Nonlinearity
+        *   Trivium
+        *   RC4
+        *   ChaCha20
+    *   Block Ciphers
+        *   Substitution-Permutation Networks
+        *   Feistel Networks
+        *   DES – The Data Encryption Standard
+        *   3DES: Increasing the Key Length of a Block Cipher
+        *   AES (Advanced Encryption Standard)
+        *   \*Differential and Linear Cryptanalysis
+    *   Compression Functions and Hash Functions
+        *   Compression Functions from Block Ciphers
 
----
+8.  \*Theoretical Constructions of Symmetric-Key Primitives
+    *   One-Way Functions
+        *   Definitions
+        *   Candidate One-Way Functions
+        *   Hard-Core Predicates
+    *   From One-Way Functions to Pseudorandomness
+    *   Hard-Core Predicates from One-Way Functions
+        *   A Simple Case
+        *   A More Involved Case
+        *   The Full Proof
 
-## **Part III: Public-Key (Asymmetric) Cryptography**  
-### **Chapter 8: Number Theory and Cryptographic Hardness Assumptions**  
-8.1 Modular Arithmetic and Groups  
-8.2 Primes, Factoring, and RSA Assumption  
-8.3 Discrete Logarithm and Diffie-Hellman Problems  
-8.4 Elliptic Curve Cryptography (ECC)  
+9.  Public-Key (Asymmetric) Cryptography
+    *   Number Theory and Cryptographic Hardness Assumptions
+        *   Preliminaries and Basic Group Theory
+            *   Primes and Divisibility
+            *   Modular Arithmetic
+            *   Groups
+            *   The Group ZN\*
+            *   \*Isomorphisms and the Chinese Remainder Theorem
+        *   Primes, Factoring, and RSA
+            *   Generating Random Primes
+            *   \*Primality Testing
+            *   The Factoring Assumption
+            *   The RSA Assumption
+            *   \*Relating the Factoring and RSA Assumptions
+        *   Cryptographic Assumptions in Cyclic Groups
+            *   Cyclic Groups and Generators
+            *   The Discrete-Logarithm/Diffie-Hellman Assumptions
+            *   Working in (Sub)groups of Zp\*
+            *   Elliptic Curves
 
-### **Chapter 9: Public-Key Encryption**  
-9.1 Definitions and Security Against CPA  
-9.2 Hybrid Encryption and the KEM/DEM Paradigm  
-9.3 RSA Encryption and OAEP Padding  
-9.4 ElGamal Encryption  
+10. \*Algorithms for Factoring and Computing Discrete Logarithms
+    *   Algorithms for Factoring
+        *   Pollard’s ρ Algorithm
+        *   Pollard’s p-1 Algorithm
+        *   The Quadratic Sieve Algorithm
+    *   Generic Algorithms for Computing Discrete Logarithms
+        *   The Pohlig-Hellman Algorithm
+        *   The Baby-Step/Giant-Step Algorithm
+        *   Discrete Logarithms from Collisions
+    *   Index Calculus: Computing Discrete Logarithms in Zp\*
+    *   Recommended Key Lengths
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 10: Digital Signature Schemes**  
-10.1 Definitions and Security Requirements  
-10.2 RSA Signatures and PKCS#1  
-10.3 Schnorr Signatures and DSA  
-10.4 Certificates and Public-Key Infrastructure (PKI)  
+11. Key Management and the Public-Key Revolution
+    *   Key Distribution and Key Management
+    *   A Partial Solution: Key Distribution Centers
+    *   Key Exchange and the Diffie-Hellman Protocol
+    *   The Public-Key Revolution
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 11: Post-Quantum Cryptography**  
-11.1 Lattice-Based Cryptography  
-11.2 Hash-Based Signatures (e.g., SPHINCS+)  
-11.3 Code-Based and Multivariate Cryptography  
+12. Public-Key Encryption
+    *   Public-Key Encryption – An Overview
+    *   Definitions
+    *   Security against Chosen-Plaintext Attacks
+    *   Multiple Encryptions
+    *   Security against Chosen-Ciphertext Attacks
+    *   Hybrid Encryption and the KEM/DEM Paradigm
+    *   CPA-Security
+    *   CCA-Security
+    *   CDH/DDH-Based Encryption
+    *   El Gamal Encryption
+    *   DDH-Based Key Encapsulation
+    *   \*A CDH-Based KEM in the Random-Oracle Model
+    *   \*Chosen-Ciphertext Security and DHIES/ECIES
+    *   RSA-Based Encryption
+    *   Plain RSA Encryption
+    *   Padded RSA and PKCS #1 v1.5
+    *   \*CPA-Secure Encryption without Random Oracles
+    *   OAEP and PKCS #1 v2
+    *   \*A CCA-Secure KEM in the Random-Oracle Model
+    *   RSA Implementation Issues and Pitfalls
+    *   References and Additional Reading
+    *   Exercises
 
----
+13. Digital Signature Schemes
+    *   Digital Signatures – An Overview
+    *   Definitions
+    *   The Hash-and-Sign Paradigm
+    *   RSA-Based Signatures
+        *   Plain RSA Signatures
+        *   RSA-FDH and PKCS #1 Standards
+    *   Signatures from the Discrete-Logarithm Problem
+        *   Identification Schemes and Signatures
+        *   The Schnorr Identification/Signature Schemes
+        *   DSA and ECDSA
+    *   Certificates and Public-Key Infrastructures
+    *   Putting It All Together – TLS
+    *   \*Signature
+    *   References and Additional Reading
+    *   Exercises
 
-## **Part IV: Advanced Topics**  
-### **Chapter 12: Key Management and the Public-Key Revolution**  
-12.1 Key-Distribution Problem and Public-Key Solutions  
-12.2 Session-Key Establishment (TLS Handshake)  
+14. \*Post-Quantum Cryptography
+    *   Post-Quantum Symmetric-Key Cryptography
+        *   Grover’s Algorithm and Symmetric-Key Lengths
+        *   Collision-Finding Algorithms and Hash Functions
+    *   Shor’s Algorithm and its Impact on Cryptography
+    *   Post-Quantum Public-Key Encryption
+    *   Post-Quantum Signatures
+        *   Lamport Signature Scheme
+        *   Chain-Based Signatures
+        *   Tree-Based Signatures
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 13: Zero-Knowledge Proofs**  
-13.1 Interactive Proof Systems  
-13.2 Zero-Knowledge for NP-Complete Problems  
-13.3 Applications: Identification Protocols  
+15. \*Advanced Topics in Public-Key Encryption
+    *   Public-Key Encryption from Trapdoor Permutations
+        *   Trapdoor Permutations
+        *   Public-Key Encryption Schemes
+    *   The Paillier Encryption Scheme
+        *   The Structure of ZN\*
+        *   The Paillier Encryption Scheme
+        *   Homomorphic Encryption
+    *   Secret Sharing and Threshold Encryption
+        *   Secret Sharing
+        *   Verifiable Secret Sharing
+        *   Threshold Encryption and Electronic Voting
+    *   The Goldwasser-Micali Encryption Scheme
+        *   Quadratic Residues Modulo a Prime
+        *   Quadratic Residues Modulo a Composite
+        *   The Quadratic Residuosity Assumption
+    *   The Rabin Encryption Scheme
+        *   Computing Modular Square Roots
+        *   A Trapdoor Permutation Based on Factoring
+        *   The Rabin Encryption Scheme
+    *   References and Additional Reading
+    *   Exercises
 
-### **Chapter 14: Secure Multiparty Computation (MPC)**  
-14.1 Secret Sharing and Threshold Cryptography  
-14.2 Yao’s Garbled Circuits  
-14.3 MPC Protocols with Malicious Adversaries  
+**Appendix A Mathematical Background**
+* Identities and Inequalities
+* Asymptotic Notation
+* Basic Probability
+* The "Birthday" Problem
+* \*Finite Fields
 
-### **Chapter 15: Fully Homomorphic Encryption (FHE)**  
-15.1 Definitions and Basic Schemes  
-15.2 Bootstrapping and Practical Challenges  
+**Appendix B Basic Algorithmic Number Theory**
+* Integer Arithmetic
+    * Basic Operations
+    * The Euclidean and Extended Euclidean Algorithms
+* Modular Arithmetic
+    * Basic Operations
+    * Computing Modular Inverses
+    * Modular Exponentiation
+    * \*Montgomery Multiplication
+    * Choosing a Uniform Group Element
+* \*Finding a Generator of a Cyclic Group
+    * Group-Theoretic Background
+    * Efficient Algorithms
 
----
+**References**
+**Index of Common Notation**
+**Index**
 
-## **Appendices**  
-- **Appendix A: Mathematical Background** (Probability, Algebra, Complexity Theory)  
-- **Appendix B: Basic Algorithmic Number Theory**  
-- **Appendix C: Reduction-Based Proofs in Cryptography**  
+**Key:**
 
----
-
-### **Key features of the book**:  
-- **Theoretical rigor**: All definitions and proofs are given formally.  
-- **Practical focus**: Analysis of real circuits (AES, RSA, ECC, TLS).  
-- **Current topics**: Post-quantum cryptography, FHE, MPC.  
-
+*   Sections marked with an asterisk (\*) are considered more advanced topics.
