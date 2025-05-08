@@ -92,7 +92,7 @@ int main() {
     long long n = p * q;
     long long phi = (p - 1) * (q - 1);
     long long e = 65537; // Standard public exponent
-long long d = mod_inv(e, phi); // Secret key
+    long long d = mod_inv(e, phi); // Secret key
 
     printf("[+] RSA key generation:\n");
     printf("p = %lld\n", p);
