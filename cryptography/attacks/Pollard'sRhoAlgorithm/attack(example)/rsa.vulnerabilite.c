@@ -62,7 +62,7 @@ long long mod_inv(long long a, long long m) {
     // Using the extended Euclidean algorithm
     while (a > 1) {
         // q is the quotient of a by m
-q = a / m;
+        q = a / m;
         
         t = m;
         
