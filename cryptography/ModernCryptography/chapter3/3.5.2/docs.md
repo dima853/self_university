@@ -7,20 +7,5 @@ length **n**.
 
 ## PROOF: 
 
-<!--
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
--->
-
 $$\left| \Pr\left[ \PrivK_{\mathcal{A},\Pi}^{\text{CPa}}(n) = 1 \right] - \Pr\left[ \PrivK_{\mathcal{A},\Pi}^{\text{CPa}}(n) = 1 \right] \right| \leq \mathsf{negl}(n). \quad (3.9)$$
 
-<!--
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
--->
-
-# My Awesome Project
-
-This project uses the quadratic formula, which is:
-
-$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
