@@ -10,3 +10,4 @@ length **n**.
 
 $$\left| \Pr\left[PrivK_{\mathcal{A},\Pi}^{\text{CPa}}(n) = 1 \right] - \Pr\left[PrivK_{\mathcal{A}, \tilde{\Pi}}^{\text{CPa}}(n) = 1 \right] \right| \leq \mathsf{negl}(n). \quad (3.9)$$
 
+$$\text{Init: on input } s \in \{0,1\}^n \text{ and } IV \in \{0,1\}^{3n/4}, \text{ output } st = (s, IV, 0).$$
