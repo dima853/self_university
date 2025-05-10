@@ -14,11 +14,13 @@ length **n**.
 
 This project uses the quadratic formula, which is:
 
+<!--
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+-->
+
+# My Awesome Project
+
+This project uses the quadratic formula, which is:
 
 $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
-
-Here's another important equation: $E = mc^2$
-
-And this is inline: $\alpha + \beta = \gamma$
