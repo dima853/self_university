@@ -1,6 +1,6 @@
 # Classes of Links
 
-| Частоты (Hz) | Тип излучения       | Приложения          |
+| Frequency (Hz) | Type of radiation | Applications |
 |--------------|---------------------|---------------------|
 | 10^0         | Radio               | Coax                |
 | 10^2         | Microwave           | AM                  |
