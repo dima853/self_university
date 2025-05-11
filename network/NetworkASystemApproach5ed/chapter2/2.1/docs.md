@@ -110,6 +110,7 @@ $$\[
 #### Note:
 - For high frequencies (e.g. 300 MHz), the wavelength will be significantly shorter.
 - Signals propagate slower in copper media than in vacuum (coefficient ~2/3).
+
 | Frequency (Hz) | Type of radiation | Applications |
 |--------------|---------------------|---------------------|
 | 10^0         | Radio               | Coax                |
