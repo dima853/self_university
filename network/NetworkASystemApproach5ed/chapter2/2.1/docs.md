@@ -125,7 +125,7 @@ transmitting — binary data (1 and 0).
 
 **The problem of encoding binary data onto electromagnetic signals is a	complex	topic.**
 
-### **Summary: Fundamentals of modulation and data transmission**  
+# **Summary: Fundamentals of modulation and data transmission**  
 
 #### **1. Lower level (modulation)**  
 - **Modulation** is the change of signal parameters (frequency, amplitude, phase) to transmit information.  
@@ -159,7 +159,7 @@ For in-depth study:
 - **Modulation methods**: AM, FM, PSK.  
 - **Coding schemes**: NRZ, 4B/5B, Manchester code.
 
-### **Summary: Classification of network connections by type of use**
+# **Summary: Classification of network connections by type of use**
 
 #### **1. Main categories of network connections**
 1. **Wireless Networks**
