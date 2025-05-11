@@ -84,7 +84,6 @@ While fiber optics are replacing coax in high-speed internet, coaxial cables rem
 ### **Conclusion**  
 Coaxial cables are reliable for RF signal transmission but are gradually being replaced by fiber in high-speed data networks. However, they remain essential in broadcasting, surveillance, and telecom industries.  
 
-Here is a display of the formula with an explanation:
 
 ### The formula for calculating the wavelength in a copper cable:
 $$[
