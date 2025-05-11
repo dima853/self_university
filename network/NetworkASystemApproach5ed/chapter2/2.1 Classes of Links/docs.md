@@ -1,7 +1,85 @@
-# Classes of Links
+# 2.1 Classes of Links
 [Digital Subscriber	Line (DSL)](https://en.wikipedia.org/wiki/Digital_subscriber_line)
+### **Digital Subscriber Line (DSL) — Digital subscriber line technology**
 
-### [Coaxial Cable](https://en.wikipedia.org/wiki/Coaxial_cable?ysclid=majkf3rczi300781000)
+**DSL** is a family of technologies that provide high—speed Internet access via conventional telephone lines (copper pairs). Unlike dial-up, DSL allows simultaneous transmission of data and voice (telephone conversations) due to frequency separation.
+
+---
+
+## **1. How DSL works**
+### **Key Features**
+- **Uses the existing infrastructure** of telephone lines (copper pairs).
+- **Operates at frequencies above the voice range** (25 kHz – 2.2 MHz), so it does not interfere with telephone communication.
+- **Asymmetric and symmetric transmission**:
+- **ADSL** (Asymmetric DSL) — different download and upload speeds.
+  - **SDSL** (Symmetrical DSL) — the same speed in both directions.
+
+### **Technical basis**
+- **Signal modulation**:
+The following methods are used:
+- **DMT (Discrete Multi-Tone)** — splitting the signal into 256 frequency channels (for ADSL2+).
+  - **CAP (Carrierless Amplitude Phase)** — deprecated method (early versions of DSL).
+- **Filtering (Splitter)**:
+- **Low-pass filter** — skips the voice (0-4 kHz).
+  - **High-pass filter** — highlights data (above 25 kHz).
+
+---
+
+## **2. Types of DSL technologies**
+| **Type**       | **Speed (Download/Upload)** | **Application**                     |
+|---------------|-------------------------------|-----------------------------------|
+| **ADSL**      | Up to 24 Mbit/s / 1.4 Mbit/s | Home Internet (obsolete)    |
+| **ADSL2+**    | Up to 24 Mbit/s / 3.3 Mbit/s | Improved ADSL version |
+| **VDSL**      | Up to 100 Mbit/s / 50 Mbit/s | Short lines (<1.2 km) |
+| **VDSL2** | Up to 200 Mbps / 100 Mbps | Fiber Optic Infrastructure (FTTC) |
+| **SDSL**      | Up to 2.3 Mbit/s (symmetric)   | Business connections (deprecated)       |
+| **G.fast** | Up to 1 Gbit/s (per 100 m) | VDSL2 replacement (Gigabit speeds)|
+
+---
+
+## **3. Advantages and disadvantages**
+### **✅ Advantages**
+- Uses **existing telephone lines** (cheaper than deploying fiber).
+- **Does not interfere with telephone communication** (voice and internet work simultaneously).
+- **Available in rural areas** (where there is no fiber).
+
+### **❌ Disadvantages**
+- **The speed depends on the distance**:
+- ADSL: >5 km from the PBX → the speed drops to 1-2 Mbps.
+  - VDSL: >1.5 km → sharp decrease in speed.
+- **Inferior to optical fiber (FTTH)** and cable Internet (DOCSIS 3.1).
+- **Asymmetry** (ADSL upload is much slower than download).
+
+---
+
+## **4. Where is DSL used today?**
+1. **"Last Mile"** in regions without fiber.
+2. **Combined Solutions**:
+- **FTTC (Fiber to the Cabinet)** — optical fiber to the control cabinet + VDSL2 to the subscriber.
+   - **G.fast** — for apartment buildings (gigabit speeds over short distances).
+3. **Backup communication channels** (in business networks).
+
+---
+
+## **5. Comparison with other technologies**
+| **Parameter**       | **DSL (VDSL2)** | **Cable (DOCSIS 3.1)** | **Optical Fiber (FTTH)** |
+|--------------------|----------------|---------------------------|-----------------------|
+| **Max. Speed** | 200 Mbps | 1 Gbps | 10 Gbps+            |
+| **Distance dependence** | Strong | Weak | None |
+| **Phone Compatibility** | Yes|No (VoIP required) | No (VoIP) |
+| **Cost of deployment** | Low | Medium | High |
+
+---
+
+## **6. The future of DSL**
+- **G.fast** is the latest evolution of DSL (up to 1 Gbit/s per 100-200 m).  
+- **Displacement by optical fiber** (FTTH) in cities.  
+- **Niche application** in rural areas and as a temporary solution.  
+
+### **Conclusion**
+DSL played a key role in the transition from dial-up to broadband Internet, but today it is inferior to more modern technologies. However, in combination with FTTC (fiber to the cabinet), it remains relevant for millions of users.
+
+# [Coaxial Cable](https://en.wikipedia.org/wiki/Coaxial_cable?ysclid=majkf3rczi300781000)
 
 Coaxial cable (or "coax") is a type of electrical cable widely used for transmitting high-frequency signals with low interference. It consists of multiple layers that help shield the signal from external noise.
 
