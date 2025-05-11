@@ -109,6 +109,8 @@ $$\[
 #### Note:
 - For high frequencies (e.g. 300 MHz), the wavelength will be significantly shorter.
 - Signals propagate slower in copper media than in vacuum (coefficient ~2/3).
+> Generally,	electromagnetic	waves	span	a	much	wider	range	of	frequencies,	ranging	from	radio	waves,	to	infrared
+ light,	to	visible	light,	to	x-rays	and	gamma	rays.	
 
 | Frequency (Hz) | Type of radiation | Applications |
 |--------------|---------------------|---------------------|
