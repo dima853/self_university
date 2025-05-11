@@ -59,7 +59,7 @@ The phrase means that:
 - **RC4** breaks when repeating the keystream.  
 - **Salsa20** requires unique (nonce, key) pairs for each new message.  
 
-
+- [text](https://link.springer.com/chapter/10.1007/978-3-540-89255-7_6#preview)
 
 ## CONSTRUCTION 3.30
 - $$\text{Init: on input } s \in \{0,1\}^n \text{ and } IV \in \{0,1\}^{3n/4}, \text{ output } st = (s, IV, 0).$$
