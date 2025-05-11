@@ -2,35 +2,34 @@
 
 ```mermaid
 graph TD
-    A[Electromagnetic Spectrum]
-    B[Frequency (Hz)]
-    C[Applications]
-    
-    B -->|10^0|
-    B -->|10^2| 
-    B -->|10^4|
-    B -->|10^6|
-    B -->|10^8|
-    B -->|10^10|
-    B -->|10^12|
-    B -->|10^14|
-    B -->|10^16|
-    B -->|10^18|
-    B -->|10^20|
-    B -->|10^22|
-    B -->|10^24|
-    
-    A --> Radio
-    A --> Microwave
-    A --> Infrared
-    A --> UV
-    A --> Xray[X-ray]
-    A --> Gammaray[Gamma ray]
-    
-    C --> Coax
-    C --> AM
-    C --> FM
-    C --> TV
-    C --> Terrestrial[Terrestrial microwave]
-    C --> Fiber[Fiber optics]
+    %% Частоты
+    Freq[Frequency (Hz)] --> 0["10^0"]
+    Freq --> 2["10^2"]
+    Freq --> 4["10^4"]
+    Freq --> 6["10^6"] 
+    Freq --> 8["10^8"]
+    Freq --> 10["10^10"]
+    Freq --> 12["10^12"]
+    Freq --> 14["10^14"]
+    Freq --> 16["10^16"]
+    Freq --> 18["10^18"]
+    Freq --> 20["10^20"]
+    Freq --> 22["10^22"]
+    Freq --> 24["10^24"]
+
+    %% Спектр
+    Spec[Electromagnetic Spectrum] --> Radio
+    Spec --> Microwave
+    Spec --> Infrared
+    Spec --> UV
+    Spec --> Xray["X-ray"]
+    Spec --> Gamma["Gamma ray"]
+
+    %% Приложения
+    App[Applications] --> Coax
+    App --> AM
+    App --> FM
+    App --> TV
+    App --> TerMicrowave["Terrestrial microwave"]
+    App --> Fiber["Fiber optics"]
 ```
