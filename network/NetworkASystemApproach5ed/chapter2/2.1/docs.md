@@ -1,7 +1,7 @@
 # Classes of Links
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'clusterBkg': '#f0f0f0'}, 'config': {'rankSpacing': 5}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'clusterBkg': '#f0f0f0'}, 'config': {'rankSpacing': 5}}}%%
 graph LR
     subgraph Frequency[Frequency (Hz)]
         direction TB
