@@ -1,7 +1,7 @@
 # Classes of Links
 [Digital Subscriber	Line (DSL)](https://en.wikipedia.org/wiki/Digital_subscriber_line)
 
-### [Coaxial Cabel](https://en.wikipedia.org/wiki/Coaxial_cable?ysclid=majkf3rczi300781000)
+### [Coaxial Cable](https://en.wikipedia.org/wiki/Coaxial_cable?ysclid=majkf3rczi300781000)
 
 Coaxial cable (or "coax") is a type of electrical cable widely used for transmitting high-frequency signals with low interference. It consists of multiple layers that help shield the signal from external noise.
 
@@ -84,7 +84,32 @@ While fiber optics are replacing coax in high-speed internet, coaxial cables rem
 ### **Conclusion**  
 Coaxial cables are reliable for RF signal transmission but are gradually being replaced by fiber in high-speed data networks. However, they remain essential in broadcasting, surveillance, and telecom industries.  
 
+Here is a display of the formula with an explanation:
 
+### The formula for calculating the wavelength in a copper cable:
+$$[
+\text{Wavelength} = \frac{\text{The speed of light in copper}}{\text{Frequency}} = \frac{\frac{2}{3} \times 3 \times 10^8}{300}
+\]$$
+
+### Step-by-step calculation:
+1. **The speed of light in copper** (~66% of the speed in vacuum):  
+   $$\[
+   \frac{2}{3} \times 3 \times 10^8 = 2 \times 10^8 \, \text{m/s}
+   \]$$
+
+2. **Frequency substitution** (300 Hz):
+$$[
+   \frac{2 \times 10^8}{300} = \frac{2}{3} \times 10^6 \approx 667 \times 10^3 \, \text{meters}
+   \]$$
+
+### The final result:
+$$\[
+\boxed{667\, \text{km} \quad \text{(667,000 meters)}}
+\]$$
+
+#### Note:
+- For high frequencies (e.g. 300 MHz), the wavelength will be significantly shorter.
+- Signals propagate slower in copper media than in vacuum (coefficient ~2/3).
 | Frequency (Hz) | Type of radiation | Applications |
 |--------------|---------------------|---------------------|
 | 10^0         | Radio               | Coax                |
