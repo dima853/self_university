@@ -1,29 +1,41 @@
 # Classes of Links
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'clusterBkg': '#f0f0f0'}, 'config': {'rankSpacing': 5}}}%%
-graph LR
-    subgraph Frequency[Frequency (Hz)]
-        direction TB
-        10^0 --> 10^2 --> 10^4 --> 10^6 --> 10^8 --> 10^{10} --> 10^{12} --> 10^{14} --> 10^{16} --> 10^{18} --> 10^{20} --> 10^{22} --> 10^{24}
-    end
+%%{init: {'theme': 'base', 'themeVariables': {'clusterBkg': '#f0f0f0'}}}%%
+graph TD
+    classDef frequency fill:#e6f3ff,stroke:#333
+    classDef spectrum fill:#ffe6e6,stroke:#333
+    classDef apps fill:#e6f3ff,stroke:#333
 
-    subgraph Spectrum[Electromagnetic Spectrum]
-        direction TB
-        Radio --> Microwave --> Infrared --> UV --> X-ray --> Gamma_ray[Gamma ray]
-    end
+    A["Electromagnetic Spectrum"]:::spectrum
+    B["Frequency (Hz)"]:::frequency
+    C["Applications"]:::apps
 
-    subgraph Applications[Applications]
-        direction TB
-        Coax --> AM --> FM --> TV --> Terrestrial_microwave[Terrestrial microwave] --> Fiber_optics[Fiber optics]
-    end
+    B --> 10^0
+    B --> 10^2
+    B --> 10^4
+    B --> 10^6
+    B --> 10^8
+    B --> 10^10
+    B --> 10^12
+    B --> 10^14
+    B --> 10^16
+    B --> 10^18
+    B --> 10^20
+    B --> 10^22
+    B --> 10^24
 
-    %% Связи для визуального соответствия изображению
-    Frequency -.- Spectrum
-    Frequency -.- Applications
+    A --> Radio
+    A --> Microwave
+    A --> Infrared
+    A --> UV
+    A --> Xray["X-ray"]
+    A --> Gammaray["Gamma ray"]
 
-    %% Стилизация
-    style Frequency fill:#e6f3ff,stroke:#333
-    style Spectrum fill:#ffe6e6,stroke:#333
-    style Applications fill:#e6f3ff,stroke:#333
+    C --> Coax
+    C --> AM
+    C --> FM
+    C --> TV
+    C --> Terrestrial
+    C --> Fiber
 ```
