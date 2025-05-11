@@ -109,8 +109,8 @@ $$\[
 #### Note:
 - For high frequencies (e.g. 300 MHz), the wavelength will be significantly shorter.
 - Signals propagate slower in copper media than in vacuum (coefficient ~2/3).
-> Generally,	electromagnetic	waves	span	a	much	wider	range	of	frequencies,	ranging	from	radio	waves,	to	infrared
- light,	to	visible	light,	to	x-rays	and	gamma	rays.	
+> Generally, electromagnetic waves span	a much wider range of frequencies, ranging from	radio waves, to	infrared
+light, to visible light, to	x-rays and gamma rays.	
 
 | Frequency (Hz) | Type of radiation | Applications |
 |--------------|---------------------|---------------------|
@@ -120,6 +120,101 @@ $$\[
 | 10^6         | UV                  | TV                  |
 | 10^8         | X-ray               | Terrestrial microwave|
 | 10^10        | Gamma ray           | Fiber optics        |
+> Such links provide the basis for transmitting all kinds of information, including the data that we are interested in
+transmitting — binary data (1 and 0).
+
+**The problem of encoding binary data onto electromagnetic signals is a	complex	topic.**
+
+### **Summary: Fundamentals of modulation and data transmission**  
+
+#### **1. Lower level (modulation)**  
+- **Modulation** is the change of signal parameters (frequency, amplitude, phase) to transmit information.  
+- **Example**: Amplitude modulation (AM) is a change in signal power (analogous to turning on/off a light).  
+- **Application**: Conversion of digital data into analog signals for transmission over physical media (copper wires, radio waves).  
+
+#### **2. Upper level (data encoding)**  
+- **Task**: Converting binary data (0 and 1) into distinguishable signals (for example, "high" and "low" levels).  
+- **Simplification**: In the context of computer networks, modulation is considered a solved problem; the focus is on coding methods.  
+
+#### **3. Key ideas**  
+1. **Separation of layers**:
+- **Bottom layer** (physical): signal modulation.  
+   - **Top layer** (channel/network): encoding bits into signals.  
+2. **Binary encoding**:  
+   - Uses two distinguishable signal states to represent 0 and 1.  
+   - Examples of methods: NRZ, Manchester coding (see the next section).  
+3. **Abstraction**:  
+   - For network design, the modulation is often "hidden", and the analysis is carried out at the level of discrete signals.  
+
+#### **4. Importance for networks**  
+- **Reliability**: Correct encoding minimizes transmission errors.  
+- **Compatibility**: Standardized methods (for example, Ethernet) ensure the interaction of devices.  
+
+---
+
+### **Conclusion**  
+Modulation and encoding are fundamental data transmission processes. In network models, the upper layer (encoding) plays a key role, abstracting from the physical implementation of the modulation.  
+
+For in-depth study:
+- **Modulation methods**: AM, FM, PSK.  
+- **Coding schemes**: NRZ, 4B/5B, Manchester code.
+
+### **Summary: Classification of network connections by type of use**
+
+#### **1. Main categories of network connections**
+1. **Wireless Networks**
+- **Where**meet: cafes, airports, universities, public places.  
+   - **Features**:
+- Convenience for mobile users.  
+     - Limited speed and coverage area.  
+     - Examples: Wi-Fi, 4G/5G.  
+
+2. **"The Last Mile" (Last-Mile Links)**
+- **Providers**: Internet services for end users (homes, offices).  
+   - **Technologies**:  
+     - **DSL** (uses existing copper telephone lines).  
+     - **Cable Internet** (via CATV coaxial cables).  
+     - **Optical Fiber (FTTH)** — High-speed connection.  
+   - **Features**:
+- Cost-effective for mass deployment.  
+     - They are not suitable for creating backbone networks.  
+
+3. **Backbone Links**
+- **Destination**: Connecting between cities and countries.  
+   - **Technologies**:
+- High-speed fiber optic lines.  
+     - Satellite or radio relay communications (for remote regions).  
+   - **Requirements**:  
+     - High bandwidth (100+ Gbps).  
+     - Minimal delays.  
+
+---
+
+#### **2. Economic and technological factors**
+- **DSL**: Cheap to deploy (uses existing telephone infrastructure), but outdated.  
+- **Optical Fiber (FTTH)**: More expensive, but provides future scalability.  
+- **Wireless technologies**: Low cost coverage for mobile users, but depend on the frequency spectrum.  
+
+---
+
+#### **3. The limitations of the "last mile"**
+- **Not suitable for global networks**:  
+  - Low speed compared to main lines.  
+  - Local coverage (for example, DSL only works at a distance of ~5 km from the PBX).  
+- **Solution**: A combination of "last mile" + high-speed highways.  
+
+---
+
+### **Conclusion**
+Network connections are classified according to **place of use** (user vs backbone) and **economic feasibility**.  
+- **For consumers**: Wireless and "last mile" (DSL, Cable, FTTH).  
+- **For global networks**: Fiber optic trunks.  
+
+**Example**: Home Wi-Fi (wireless) → DSL (last mile) → Urban Fiber (backbone).  
+
+For in-depth study:  
+- **Comparison of "last mile" technologies**: DSL vs Cable vs FTTH.  
+- **Current trends**: Deployment of 5G and satellite Internet (Starlink).
 
 | Service               | Bandwidth (typical)  |
 |-----------------------|----------------------|
