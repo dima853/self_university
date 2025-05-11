@@ -225,3 +225,55 @@ For in-depth study:
 | FTTH (fiber to home)  | 50 Mbps-1 Gbps       |
 
 _Table 1.Common services available to connect your home._
+
+# **Summary: Modern network connection technologies**
+
+---
+
+#### **1. Long-term backbone connections (Backbone Links)**
+- **Main technology**: **Optical fiber** (almost completely replaced coaxial cables in the last 20-30 years).  
+- **Standard**: **SONET (Synchronous Optical Network)**
+- Designed for telecommunication operators.  
+  - Provides:
+- High reliability and manageability.  
+    - Synchronous data transmission (minimum delays).  
+  - Modern analogues: **DWDM** (dense multiplexing) to increase bandwidth.  
+
+---
+
+#### **2. Local Area Networks (LANs)**
+- **Dominant technology**: **Ethernet**
+- Replaced outdated solutions (for example, Token Ring).  
+  - Modern standards:  
+    - **Wired**: Gigabit Ethernet (1/10/100 Gbps).  
+    - **Wireless**: **Wi-Fi (802.11 a/b/g/n/ac/ax)**.  
+- **Trends**:
+- Combination of Ethernet and Wi-Fi in corporate and home networks.  
+  - Increased speed (up to 100 Gbit/s for wired, up to 9.6 Gbit/s for Wi-Fi 6).  
+
+---
+
+#### **3. Diversity of technologies and their integration**
+- **Reasons for diversity**:  
+  - Economic feasibility (for example, DSL for the "last mile").  
+  - Technical requirements (optical fiber for highways, Wi-Fi for mobility).  
+- **The task of network protocols**:
+- Hide the low-level complexity (different types of connections).  
+  - Provide a single interface for the upper layers (for example, the IP layer).  
+
+---
+
+### **Key findings**
+1. **Optical fiber** is the standard for highways due to speed and reliability (SONET/DWDM).  
+2. **Ethernet and Wi-Fi** dominate LAN, providing flexibility and high performance.  
+3. **Network protocols** (for example, TCP/IP) abstract the differences between technologies, simplifying the work of applications.  
+
+---
+
+### **Additional topics to study**
+- **SONET/SDH**: Principles of synchronization and management.  
+- **Evolution of Ethernet**: From 10 Mbit/s to Terabit Ethernet.  
+- **Wi-Fi 6/7**: New wireless standards.  
+- **Software-defined networks (SDN)**: Management of heterogeneous environments.  
+
+This review demonstrates how historical, economic, and technical factors shape modern networks.
