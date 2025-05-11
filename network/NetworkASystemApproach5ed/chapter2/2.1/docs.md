@@ -223,3 +223,4 @@ For in-depth study:
 | DSL                   | 128 kbps-100 Mbps    |
 | CATV (cable TV)       | 1-40 Mbps            |
 | FTTH (fiber to home)  | 50 Mbps-1 Gbps       |
+_Table 1.Common services available to connect your home._
