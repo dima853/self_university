@@ -138,3 +138,6 @@ LANs are prime targets for attackers due to **trusted internal access**. Below a
 **Want to test your LAN security?**  
 - Try **Kali Linux tools** (`ettercap`, `yersinia`, `macof`).  
 - Perform **penetration testing** with **Wireshark** and **Metasploit**.  
+
+## Additional Materials 
+- [Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame?ysclid=malbglyq8281848438)
