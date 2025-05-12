@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
+#include <openssl/hmac.h>
+
+uint8_t known_mac[32] = {0}; /* Initial guess */
 
 /**
  * @brief This function is vulnerable to timing attacks. It compares two MACs byte by byte and returns 0 (failure)
@@ -45,9 +48,9 @@ int vulnerable_verify(const uint8_t *correct_mac, const uint8_t *user_mac) {
  * @param msg Pointer to the message.
  * @param mac Pointer to the buffer where the generated MAC will be stored.
  */
-void fake_hmac(const uint8_t *key, const uint8_t *msg, uint8_t *mac) {
+ void fake_hmac(const uint8_t *key, const uint8_t *msg, uint8_t *mac) {
     for (int i = 0; i < 32; i++) {
-        mac[i] = key[i % 16] ^ msg[i % 8]; /* "Hash" via XOR */
+        mac[i] = (key[i % 32] + msg[i % 32] + i) % 256; /* Ненастоящий HMAC! */
     }
 }
 
@@ -109,7 +112,6 @@ uint64_t get_time() {
  * @param correct_mac Pointer to the correct MAC that we are trying to recover.
  */
 void timing_attack(const uint8_t *correct_mac) {
-    uint8_t known_mac[32] = {0}; /* Initial guess */
 
     for (int i = 0; i < 32; i++) { /* Iterate over each MAC byte */
         uint64_t max_time = 0;
@@ -159,16 +161,31 @@ void timing_attack(const uint8_t *correct_mac) {
  *
  * @return 0 on success.
  */
-int main() {
-    uint8_t key[16] = "secret_key_12345"; /* Secret key */
-    uint8_t msg[8] = "message";           /* Message */
+ int main() {
+    uint8_t key[32] = "this_is_a_32_byte_secret_key_123456";
+    uint8_t msg[32] = "this_is_a_32_byte_message_123456";
     uint8_t correct_mac[32];              /* Correct MAC */
 
     /* Generate HMAC */
     fake_hmac(key, msg, correct_mac);
 
+    // Выводим правильный MAC
+    printf("Correct MAC:   ");
+    for (int i = 0; i < 32; i++) printf("%02X", correct_mac[i]);
+    printf("\n");
+
     /* Launch the attack */
     timing_attack(correct_mac);
+
+    int verification_result = vulnerable_verify(correct_mac, known_mac);
+    printf("Verification: %d\n", verification_result);
+
+    // Выводим сообщение, совпадают ли маки
+    if (verification_result == 1) {
+        printf("The recovered MAC matches the correct MAC!\n");
+    } else {
+        printf("The recovered MAC DOES NOT match the correct MAC.\n");
+    }
 
     return 0;
 }
