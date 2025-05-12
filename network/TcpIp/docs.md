@@ -7,7 +7,7 @@ https://files.arav.su/file/books/computers%20and%20technology/Networking/TCP_IP%
 #### **1. Creating a raw socket**
 - **Goal**: To gain access to the network stack for manual packet generation.
 - **Features**:
-- The socket type `SOCK_RAW' is used (allows you to set headers manually).
+- The socket type `SOCK_RAW` is used (allows you to set headers manually).
   - Windows requires `IPPROTO_RAW', Linux requires `IPPROTO_TCP'.
   - You need administrator rights (root/sudo).
 
