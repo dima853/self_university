@@ -45,7 +45,7 @@ typedef struct _iphdr {
     unsigned char  tos;      /* Type of Service */
     unsigned short tot_len;  	/* Total Length */
 
-    unsigned short id ;       	/* Identification */
+    unsigned short id;       	/* Identification */
 	unsigned int   frag_off;   /* Fragment Offset */
 
     unsigned char  ttl;      	/* Time To Live */
