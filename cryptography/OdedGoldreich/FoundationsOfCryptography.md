@@ -98,4 +98,3 @@ Here's the **complete table of contents** for **"Foundations of Cryptography"** 
 - **Concrete Security**: Add Dan Boneh’s "Graduate Course in Applied Crypto" for real-world parameters.  
 - **Post-Quantum**: Include Peikert’s "A Decade of Lattice Cryptography".  
 
-This material will **elevate your program** to a **PhD-level understanding**. Which volume’s topics align with your current focus?
