@@ -15,15 +15,12 @@ void bp(const char* filename, const char* text) {
         return;
     }
 
-    // Записываем сигнатуру (4 байта)
     uint32_t signature = SIGNATURE;
     fwrite(&signature, sizeof(uint32_t), 1, file);
 
-    // Записываем длину текста (4 байта)
     uint32_t text_length = strlen(text);
     fwrite(&text_length, sizeof(uint32_t), 1, file);
 
-    // Записываем сам текст
     fwrite(text, sizeof(char), text_length, file);
 
     fclose(file);

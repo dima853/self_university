@@ -12,7 +12,6 @@ char* read_my_format(const char* filename) {
         return NULL;
     }
 
-    // Читаем сигнатуру
     uint32_t signature;
     fread(&signature, sizeof(uint32_t), 1, file);
 
@@ -22,11 +21,9 @@ char* read_my_format(const char* filename) {
         return NULL;
     }
 
-    // Читаем длину текст
     uint32_t text_length;
     fread(&text_length, sizeof(uint32_t), 1, file);
 
-    // Выделяем память под текст (+1 для '\0')
     char* text = malloc(text_length + 1);
     if (!text) {
         perror("Ошибка выделения памяти");
@@ -34,9 +31,8 @@ char* read_my_format(const char* filename) {
         return NULL;
     }
 
-    // Читаем текст
     fread(text, sizeof(char), text_length, file);
-    text[text_length] = '\0'; // Добавляем нуль-терминатор
+    text[text_length] = '\0';
 
     fclose(file);
     return text;
@@ -47,7 +43,7 @@ int main() {
     
     if (text) {
         printf("Прочитанный текст: %s\n", text);
-        free(text); // Не забываем освободить память!
+        free(text); 
     }
 
     return 0;
