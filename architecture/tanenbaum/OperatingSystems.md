@@ -1,4 +1,3 @@
-Here is the **full table of contents** of the book **"Modern Operating Systems" (4th Edition, Andrew Tanenbaum & Herbert Bos)** with a detailed structure and academic design:
 
 ---
 
@@ -105,11 +104,3 @@ Here is the **full table of contents** of the book **"Modern Operating Systems" 
 12.2 Binder IPC  
 12.3 Security Model (SELinux)  
 
----
-
-### **Key features of the book**:
-- **Coverage depth**: From classical algorithms (LRU, Banker's Algorithm) to modern technologies (SSD, Kubernetes).
-- **Practical examples**: Detailed analysis of Linux, Windows and Android.
-- **The balance of theory and practice**: Each concept is supported by real cases.
-
-If necessary, I can offer **additional materials** (for example, laboratory work on Rust/C or analysis of the source code of kernels). Which section is most important for your learning?
