@@ -141,3 +141,7 @@ LANs are prime targets for attackers due to **trusted internal access**. Below a
 
 ## Additional Materials 
 - [Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame?ysclid=malbglyq8281848438)
+## Structure
+- [CRC](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)
+### CRC
+- CRCs are so called because the check (data verification) value is a redundancy (it expands the message without adding information) and the algorithm is based on **[Cyclic codes](https://en.wikipedia.org/wiki/Cyclic_code)**
