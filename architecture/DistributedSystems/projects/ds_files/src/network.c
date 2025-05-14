@@ -7,11 +7,78 @@
 #include <unistd.h>      /* POSIX operating system API for functions like close, read, write, etc. */
 #include <arpa/inet.h>   /* Internet address conversion functions like inet_ntoa. */
 #include <errno.h>       /* Error number definitions (e.g., EWOULDBLOCK, EINTR). */
+#include <ctype.h>
 
 #define PORT 8080          /* Define the port number on which the server will listen for incoming connections. */
 #define MAX_PEERS 10       /* Define the maximum number of peers that can be tracked in the peer list. */
 #define BUFFER_SIZE 1024    /* Define the size of the buffer used for reading and writing data to sockets. */
 #define MAX_EVENTS 10       /* Define the maximum number of events that can be handled in a single epoll_wait call. */
+
+uint32_t hex_to_int(char hex) {
+    uint32_t val = 0;
+    while (hex) {
+        uint8_t byte = hex++;
+
+        if ((byte >= '0' && byte <= '9') ||
+            (byte >= 'a' && byte <= 'f') ||
+            (byte >= 'A' && byte <= 'F')) {
+            if (byte >= '0' && byte <= '9') byte = byte - '0';
+            else if (byte >= 'a' && byte <='f') byte = byte - 'a' + 10;
+            else if (byte >= 'A' && byte <='F') byte = byte - 'A' + 10;
+
+            val = (val << 4) | (byte & 0xF);
+        } else {
+            return 0; 
+        }
+    }
+    return -1;
+}
+
+/*
+  int high = hex_to_int(src[i+1]) Converts the first hexadecimal character (after %) to a numeric value. hex_to_int is an auxiliary function (not shown in the code) that must convert a hexadecimal character (for example, ‘A’, ‘3’, ‘f’) to its numeric representation (for example, 10, 3, 15).
+  int low = hex_to_int(src[i+2]) Converts the second hexadecimal character (after %) to a numeric value.
+  
+  dest[decoded_idx++] = (high << 4)| low; 
+  Example - ("%41")
+  ---------------------------------------
+  high = 4 (0000 0100)
+  high << 4 = 0100 0000 (64)
+
+  low = 1 (0000 0001)
+
+  (high << 4) | low = 0100 0000 | 0000 0001 = 0100 0001 (65)
+  ----------------------------------------------------------
+*/
+char* url_decode(const char* src, char* dest, size_t dest_size) {
+    if (!src || !dest || dest_size == 0) return NULL;
+    
+    size_t decoded_idx = 0;
+    size_t src_len = strlen(src);
+    
+    for (size_t i = 0; i < src_len && decoded_idx < dest_size - 1; i++) {
+        if (src[i] == '%') {
+            if (i + 2 >= src_len) return NULL;
+            
+            int high = hex_to_int(src[i+1]);
+            int low = hex_to_int(src[i+2]);
+            
+            if (high == -1 || low == -1) return NULL;
+            
+            dest[decoded_idx++] = (high << 4) | low;
+            i += 2;
+        }
+        else if (src[i] == '+') {
+            dest[decoded_idx++] = ' ';
+        }
+        else {
+            dest[decoded_idx++] = src[i];
+        }
+    }
+    
+    dest[decoded_idx] = '\0';
+    return dest;
+    
+}
 
 typedef struct {
     char ip[16];           /* Character array to store the IP address of a peer (16 bytes for IPv4 address). */
@@ -139,7 +206,9 @@ int start_server() {
 
 void handle_connection(int socket) {
     char buffer[BUFFER_SIZE] = {0}; /* Character array to store the data received from the client. */
-    int bytes_received;                /* Integer to store the number of bytes received from the client. */
+    int bytes_received;   
+    char json_response[2048] = {0};
+    char http_response[2048] = {0};/* Integer to store the number of bytes received from the client. */
 
     // Get client IP address
     struct sockaddr_in client_address;
@@ -161,7 +230,106 @@ void handle_connection(int socket) {
     } else {
         perror("recv failed"); /* If an error occurred during data reception */
     }
+    buffer[bytes_received] = '\0';
+    
+    // http parser
+    /*
+    char method[16] = {0}
+    Declares a 16-byte method array for storing HTTP methods (GET, POST, etc.) and initializes it with zeros. 
+    This is important to ensure that the array starts with an empty string.
+    
+    char uri[256] = {0} 
+    Declares a 256 byte uri array for storing the URI (Uniform Resource Identifier) and initializes it with zeros.
+    
+    char *http_version = NULL
+    Declares an http_version pointer to a string for storing the HTTP version (for example, “HTTP/1.1") and initializes it with NULL. 
+    Using NULL is useful here, as it allows you to check if space has been allocated for http_version later.
+    
+    char *request_line_end =str str(buffer, "\r\n")
+    Uses the strstr function to search for the first occurrence of newline characters (\r\n) in the buffer buffer. 
+    The result (a pointer to the beginning of \r\t) is saved in request_line_end. \r\t usually marks the end of the query string.
+    */
+    char method[16] = {0};
+    char uri[256] = {0};
+    char *http_version = NULL;
+    char *request_line_end = strstr(buffer, "\r\n");
+    
+    if (request_line_end == NULL) {
+      const char* error_response = "HTTP/1.1 400 Bad Request\nContent-Type: text/plain\n\nInvalid request line";
+      send(socket, error_response, strlen(error_response), 0);
+      close(socket);
+      return;
+    }
+    
+        if (http_version == NULL) {
+        const char* error_response = "HTTP/1.1 400 Bad Request\nContent-Type: text/plain\n\nInvalid HTTP version";
+        send(socket, error_response, strlen(error_response), 0);
+        close(socket);
+        return;
+    }
+    // Parse the HTTP method, URI, and version
+    sscanf(buffer, "%15s %255s %ms", method, uri, &http_version);
+    
+    printf("Method: %s, URI: %s\n", method, uri);
+    printf("HTTP Version: %s\n", http_version);
 
+    // Извлекаем заголовки
+    char *header_start = request_line_end + 2; // Пропускаем \r\n
+    char *header_end = strstr(header_start, "\r\n\r\n");
+
+    char headers[2048] = {0};
+    if (header_end != NULL) {
+        int header_length = header_end - header_start;
+        url_decode(headers, header_start, header_length);
+        headers[header_length] = '\0';
+        printf("Headers:\n%s\n", headers);
+    }
+    else{
+        const char* error_response = "HTTP/1.1 400 Bad Request\nContent-Type: text/plain\n\nInvalid Headers";
+        send(socket, error_response, strlen(error_response), 0);
+        close(socket);
+        return;
+    }
+
+    // Обрабатываем GET-запросы
+    if (strcmp(method, "GET") == 0) {
+        if (strcmp(uri, "/") == 0) { // Главная страница
+             snprintf(json_response, sizeof(json_response),
+                    "{\"message\": \"Welcome to my server!\", \"ip\": \"%s\", \"port\": %d}",
+                    client_ip, client_port);
+        } else if (strcmp(uri, "/hello") == 0) {
+             snprintf(json_response, sizeof(json_response),
+                    "{\"message\": \"Hello, world!\", \"client_ip\": \"%s\", \"method\": \"%s\"}",
+                    client_ip, method);
+        } else if (strcmp(uri, "/headers") == 0) {
+              char encoded_headers[4096] = {0}; 
+              url_decode(encoded_headers, headers, sizeof(encoded_headers));
+             snprintf(json_response, sizeof(json_response),
+                     "{\"headers\": \"%s\"}", encoded_headers); // Кодируем заголовки для корректной передачи в JSON
+        }
+        else {
+            // 404 Not Found
+            snprintf(http_response, sizeof(http_response),
+                "HTTP/1.1 404 Not Found\nContent-Type: text/plain\nContent-Length: 9\n\nNot Found");
+            send(socket, http_response, strlen(http_response), 0);
+            close(socket);
+            return; // Exit function to avoid sending the JSON response
+        }
+
+        // Формируем HTTP-ответ с JSON
+        snprintf(http_response, sizeof(http_response),
+                "HTTP/1.1 200 OK\nContent-Type: application/json\nContent-Length: %ld\n\n%s",
+                strlen(json_response), json_response);
+        send(socket, http_response, strlen(http_response), 0);
+
+    } else {
+        // Обработка других методов (POST, PUT, DELETE и т.д.)  (TODO)
+        const char* error_response = "HTTP/1.1 501 Not Implemented\nContent-Type: text/plain\n\nNot Implemented";
+        send(socket, error_response, strlen(error_response), 0);
+    }
+
+    free(http_version); //
+ 
     const char* response = "HTTP/1.1 200 OK\nContent-Type: text/plain\n\nHello from the server!";
     send(socket, response, strlen(response), 0);
 
@@ -180,6 +348,7 @@ void handle_connection(int socket) {
  * If an error occurs during data reception, an error message is printed using 'perror'.
  * 'close' is used to close the socket after the communication is complete.
  */
+ // Добавляем перед main()
 
 int main() {
     struct sockaddr_in address;                  /* Declare a structure for the server address. */
@@ -201,6 +370,16 @@ int main() {
         perror("epoll_create1"); /* Print an error message. */
         exit(EXIT_FAILURE);  /* Exit the program with a failure status. */
     }
+    
+    event.events = EPOLLIN;
+    event.data.fd = server_fd;
+    
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, server_fd, &event) == -1) {
+        perror("epoll_ctl: add server_fd");
+        close(epoll_fd);
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
 
     /*
      * Creates an epoll instance using the 'epoll_create1' function.
@@ -209,13 +388,39 @@ int main() {
      * If epoll creation fails, an error message is printed using 'perror', and the program exits.
      */
 
-    while (1) { /* Infinite loop to continuously accept incoming connections. */
-        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) { /* Accept a new incoming connection. */
-            perror("accept");  /* Print an error message if accepting the connection fails. */
-            continue;   /* Continue to the next iteration of the loop. */
+      while (1) {
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1); // Ожидаем события
+        if (nfds == -1) {
+            perror("epoll_wait");
+            continue; // Продолжаем слушать, даже если epoll_wait вернул ошибку
         }
 
-        handle_connection(new_socket);  /* Call the handle_connection function to handle the connection. */
+         for (int i = 0; i < nfds; ++i) {
+            if (events[i].data.fd == server_fd) {
+                // 6. Новое входящее соединение
+                if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0) {
+                    perror("accept");
+                    continue; // Продолжаем слушать, даже если accept не удался
+                }
+
+                // 7. Настраиваем событие для нового сокета
+                event.events = EPOLLIN; // Интересуемся чтением данных
+                event.data.fd = new_socket;
+
+                // 8. Добавляем новый сокет в epoll
+                if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, new_socket, &event) == -1) {
+                    perror("epoll_ctl: add new_socket");
+                    close(new_socket);
+                    continue;  // Продолжаем слушать, даже если добавление нового сокета не удалось
+                }
+
+                 printf("New connection accepted\n");
+
+            } else {
+                // 9. Обрабатываем существующее соединение (чтение данных)
+                handle_connection(events[i].data.fd);  // events[i].data.fd - дескриптор сокета, готового к чтению
+            }
+         }
     }
 
     /*
@@ -229,6 +434,7 @@ int main() {
      */
 
     close(server_fd); /* This code will never be executed because the while loop is infinite. */
+    close(epoll_fd);
     return 0;         /* Return 0 to indicate successful execution (This code will never be executed because the while loop is infinite.) */
 }
 
