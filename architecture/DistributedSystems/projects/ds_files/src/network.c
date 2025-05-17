@@ -284,7 +284,7 @@ void handle_connection(int socket) {
         headers[header_length] = '\0';
         printf("Headers:\n%s\n", headers);
     }
-    else{
+    else {
         const char* error_response = "HTTP/1.1 400 Bad Request\nContent-Type: text/plain\n\nInvalid Headers";
         send(socket, error_response, strlen(error_response), 0);
         close(socket);

@@ -85,8 +85,7 @@ long long mod_inv(long long a, long long m) {
 
 int main() {
     srand(time(0));
-
-    // RSA Key Generation
+    
     long long p = P;
     long long q = Q;
     long long n = p * q;
