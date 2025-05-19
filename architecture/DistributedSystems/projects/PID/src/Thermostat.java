@@ -7,7 +7,7 @@ public class Thermostat {
         this.room = room;
     }
 
-    // Шаг регулировки
+    // Adjustment step
     public void regulate() {
         double currentTemp = room.getCurrentTemp();
         double heatingPower = controller.calculate(currentTemp);
