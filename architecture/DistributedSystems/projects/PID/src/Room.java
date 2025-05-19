@@ -1,17 +1,17 @@
 public class Room {
-    private double currentTemp;  // текущая температура
-    private double externalNoise;  // внешние помехи (например, сквозняк)
+    private double currentTemp;  // current temperature
+    private double externalNoise;   // external noise (for example, a draft))
 
     public Room(double initialTemp) {
         this.currentTemp = initialTemp;
         this.externalNoise = 0;
     }
 
-    // Изменяет температуру с учётом нагрева и внешних факторов
+    // Changes the temperature based on heating and external factors
     public void updateTemp(double heatingPower) {
-        currentTemp += heatingPower * 0.1;  // эффект обогрева
-        currentTemp += externalNoise;       // влияние внешних помех
-        externalNoise = (Math.random() - 0.5) * 0.2;  // случайный шум
+        currentTemp += heatingPower * 0.1;  // heating effect
+        currentTemp += externalNoise; // influence of external noise
+        externalNoise = (Math.random() - 0.5) * 0.2;  // random noise
     }
 
     public double getCurrentTemp() {

@@ -1,7 +1,7 @@
 public class PIDController {
-    private double target;       // целевое значение (желаемая температура)
-    private double integral;    // интегральная составляющая
-    private double lastError;   // предыдущая ошибка
+    private double target; // target value (desired temperature)
+    private double integral; // integral component
+    private double lastError; // previous error
 
     public PIDController(double target) {
         this.target = target;
@@ -9,17 +9,17 @@ public class PIDController {
         this.lastError = 0;
     }
 
-    // Вычисляет управляющее воздействие (PID-формула)
+    // Calculates the control effect (PID formula)
     public double calculate(double current) {
         double error = target - current;
         integral += error;
         double derivative = error - lastError;
         lastError = error;
 
-        // Коэффициенты PID (можно настроить)
-        double Kp = 0.5;  // пропорциональный
-        double Ki = 0.01; // интегральный
-        double Kd = 0.1;  // дифференциальный
+        // PID coefficients (can be adjusted)
+        double Kp = 0.5; // proportional
+        double Ki = 0.01; // integral
+        double Kd = 0.1; // differential
 
         return Kp * error + Ki * integral + Kd * derivative;
     }
