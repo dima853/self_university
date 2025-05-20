@@ -29,7 +29,7 @@ Effective error logging is essential for identifying and resolving problems. The
 
 **Important Consideration:**  Error logging policies will vary between management domains. Some may prioritize minimal logging ("if it doesn't affect me, ignore it"), while others will favor vigilant monitoring of protocol anomalies.
 
-# RFC 1123: Configuration - A Summary
+# [RFC 1123](https://www.rfc-editor.org/rfc/rfc1123.html#page-7): Configuration - A Summary
 
 This section of RFC 1123 addresses the challenges and necessities of configuration within internet protocol implementations. While a fully self-configuring internet suite is the ideal, it remains a distant goal. Here's a breakdown of the key points:
 
