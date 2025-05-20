@@ -1,5 +1,5 @@
 
-## RFC 1123: Robustness Principle & Error Logging - A Summary
+## [RFC 1123](https://www.rfc-editor.org/rfc/rfc1123.html#page-7): Robustness Principle & Error Logging - A Summary
 
 This document outlines critical principles for building robust and reliable internet software, focusing on handling errors and potential misbehavior. Here's a structured breakdown:
 
