@@ -26,7 +26,7 @@ It is important to note that these classes **do not belong** to the Stream API i
 
 **Key points:**
 
-* **`InputStream` and `OutputStream':** These are basic abstract classes for reading and writing bytes.
+* **`InputStream` and `OutputStream`:** These are basic abstract classes for reading and writing bytes.
 * **Filtering:** Many classes (for example, `BufferedInputStream`, `DataInputStream`) are filtering streams that add functionality to other streams.
 * **Bytes:** These classes operate at the byte level. To work with characters, use the `Reader` and `Writer' classes.
 * **Obsolete classes:** Some classes (for example, `LineNumberInputStream`, `StringBufferInputStream`) are deprecated and are not recommended for use.
