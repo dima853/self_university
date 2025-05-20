@@ -50,3 +50,11 @@
          allow the logging of a great variety of events to be
          selectively enabled.  For example, it might useful to be able
          to "log everything" or to "log everything for host X"
+
+# Note
+> Note that different managements may have differing policies
+         about the amount of error logging that they want normally
+         enabled in a host.  Some will say, "if it doesn't hurt me, I
+         don't want to know about it", while others will want to take a
+         more watchful and aggressive attitude about detecting and
+         removing protocol abnormalities.
