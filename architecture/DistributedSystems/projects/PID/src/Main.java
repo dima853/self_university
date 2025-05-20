@@ -5,7 +5,7 @@ public class Main {
 
         for (int i = 0; i < 20; i++) {
             thermostat.regulate();
-            System.out.printf("Шаг %d: Температура = %.2f°C%n",
+            System.out.printf("Step %d: Temperature = %.2f°C%n",
                     i, room.getCurrentTemp());
         }
     }
