@@ -11,6 +11,9 @@ public class Thermostat {
     public void regulate() {
         double currentTemp = room.getCurrentTemp();
         double heatingPower = controller.calculate(currentTemp);
+
+        heatingPower = Math.max(-1.0, Math.min(1.0, heatingPower));
+
         room.updateTemp(heatingPower);
     }
 

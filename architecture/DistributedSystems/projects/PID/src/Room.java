@@ -12,6 +12,8 @@ public class Room {
         currentTemp += heatingPower * 0.1;  // heating effect
         currentTemp += externalNoise; // influence of external noise
         externalNoise = (Math.random() - 0.5) * 0.2;  // random noise
+
+        currentTemp = Math.max(10, Math.min(30, currentTemp));
     }
 
     public double getCurrentTemp() {
