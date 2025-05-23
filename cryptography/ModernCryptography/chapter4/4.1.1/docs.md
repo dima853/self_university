@@ -8,7 +8,7 @@ Cryptography ensures **secure data transfer** between the parties.
 
 #### **2. Security issues unrelated to secrecy**  
 Even if the data is encrypted, an attacker can:  
-- **To introduce false messages** (impersonation).  
+- **To introduce false messages** (impersonation).      
 - **Modify the transmitted data** (tampering).  
 
 ##### **Example 1: Bank transfer**  
@@ -42,5 +42,4 @@ HTTP is a stateless protocol, so session data (for example, a shopping cart) is 
 - **Secrecy, Security.** Even if the data is encrypted, it needs to be protected from forgery.  
 - **Integrity** is just as important as confidentiality.  
 - Cryptography provides tools to **guarantee the authenticity and immutability of data**.  
-
----
+  
