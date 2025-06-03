@@ -4,13 +4,13 @@
 #include <time.h>
 
 #define SAMPLE_RATE 44100
-#define BIT_DURATION 0.1  // 100 мс на бит
-#define FREQ_0 1070       // Частота для '0'
-#define FREQ_1 1270       // Частота для '1'
+#define BIT_DURATION 0.1  // 100 ms per bit
+#define FREQ_0 1070       // Frequency for '0'
+#define FREQ_1 1270       // Frequency for '1'
 
 // Генерирует синусоидальный сигнал для бита
 void generate_tone(double freq, double duration, FILE *file) {
-    int num_samples = duration * SAMPLE_RATE;
+    int num_samples = duration * SAMPLE_RATE; // representation of a signal of a given duration.
     for (int i = 0; i < num_samples; i++) {
         double t = (double)i / SAMPLE_RATE;
         double sample = sin(2 * M_PI * freq * t);
