@@ -3,3 +3,5 @@
 *.vscode
 *.iml
 *.idea
+*.log
+*.txt
