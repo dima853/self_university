@@ -167,11 +167,11 @@ OutputStream.write(67); // Writing a byte representing the character 'C' (ASCII 
 'OutputStream' has many subclasses that implement specific ways of writing data.  Here are some of the most commonly used:
 
 * `FileOutputStream`: For writing data to files.
-* 'ByteArrayOutputStream`'`: To write data to an array of bytes in memory.
-* `ObjectOutputStream`'`: For writing objects to a stream (serialization).
-* `PipedOutputStream`'`: For writing data to a channel (used in multithreaded programming).
-* `BufferedOutputStream`'`: For buffered data recording, improving performance.
-* `DataOutputStream`'`: For writing primitive data types (int, double, boolean) to a stream in binary format.
+* `ByteArrayOutputStream`: To write data to an array of bytes in memory.
+* `ObjectOutputStream`: For writing objects to a stream (serialization).
+* `PipedOutputStream`: For writing data to a channel (used in multithreaded programming).
+* `BufferedOutputStream`: For buffered data recording, improving performance.
+* `DataOutputStream`: For writing primitive data types (int, double, boolean) to a stream in binary format.
 
 **Example of polymorphism and implementation hiding:**
 
