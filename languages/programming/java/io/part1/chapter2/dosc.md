@@ -16,7 +16,7 @@
 
     * **Description:** An abstract method that **must be implemented** in subclasses. Writes one byte of data to the stream. The argument `b` is an integer, but only the lowest byte (8 bits) is written.
     * **Parameters:**
-        * `b': An integer representing a byte to be written (range 0-255).
+        * `b`: An integer representing a byte to be written (range 0-255).
 * **Exceptions:**
         * 'IOException': Thrown in case of an input/output error (for example, when writing to a file that does not exist or cannot be accessed).
     * **Example:**
@@ -45,7 +45,7 @@ OutputStream.write(67); // Writing a byte representing the character 'C' (ASCII 
 
     * **Description:** Writes an array of bytes to a stream.
     * **Parameters:**
-        * `data': An array of bytes to be written.
+        * `data`'`: An array of bytes to be written.
     * **Exceptions:**
         * 'IOException': Is thrown in case of an input/output error.
     * **Example:**
@@ -71,7 +71,7 @@ OutputStream.write(67); // Writing a byte representing the character 'C' (ASCII 
 
     * **Description:** Writes part of the byte array to the stream.
     * **Parameters:**
-        * `data': An array of bytes.
+        * `data`'`: An array of bytes.
         * `offset': The initial index in the 'data` array from which the record starts.
         * `length': The number of bytes to write from the 'data` array.
     * **Exceptions:**
@@ -146,7 +146,7 @@ OutputStream.write(67); // Writing a byte representing the character 'C' (ASCII 
             } catch (IOException e) {
                 System.err.println("Error writing to file: " + e.GetMessage());
             } finally {
-// Closing the stream in the finally block so that it is always closed
+        // Closing the stream in the finally block so that it is always closed
                 if (outputStream != null) {
                     try {
                         outputStream.close();
@@ -166,12 +166,12 @@ OutputStream.write(67); // Writing a byte representing the character 'C' (ASCII 
 
 'OutputStream' has many subclasses that implement specific ways of writing data.  Here are some of the most commonly used:
 
-* `FileOutputStream': For writing data to files.
-* 'ByteArrayOutputStream': To write data to an array of bytes in memory.
-* `ObjectOutputStream': For writing objects to a stream (serialization).
-* `PipedOutputStream': For writing data to a channel (used in multithreaded programming).
-* `BufferedOutputStream': For buffered data recording, improving performance.
-* `DataOutputStream': For writing primitive data types (int, double, boolean) to a stream in binary format.
+* `FileOutputStream`: For writing data to files.
+* 'ByteArrayOutputStream`'`: To write data to an array of bytes in memory.
+* `ObjectOutputStream`'`: For writing objects to a stream (serialization).
+* `PipedOutputStream`'`: For writing data to a channel (used in multithreaded programming).
+* `BufferedOutputStream`'`: For buffered data recording, improving performance.
+* `DataOutputStream`'`: For writing primitive data types (int, double, boolean) to a stream in binary format.
 
 **Example of polymorphism and implementation hiding:**
 
