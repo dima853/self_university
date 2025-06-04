@@ -64,7 +64,7 @@ BGABall ddr4_x8_bga[] = {
     {0, 5, BALL_TYPE_NC, "NC"}, // Empty ball
 // ... and so on for all rows
 };
-``
+```
 
 ---
 
