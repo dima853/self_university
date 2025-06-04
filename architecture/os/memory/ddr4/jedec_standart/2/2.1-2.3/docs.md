@@ -376,9 +376,9 @@ This is the **basic DDR4 logic** that the memory controller uses "under the hood
 - **Column** is a drawer in the room.  
 
 To get the data:  
-1. Choose the ** floor (bank)** → `BA0-BA2`.  
-2. You open the ** room (row)** → `A0-A17`.  
-3. You take the ** box (column)** → `A0-A10`.  
+1. Choose the **floor (bank)** → `BA0-BA2`.  
+2. You open the **room (row)** → `A0-A17`.  
+3. You take the **box (column)** → `A0-A10`.  
 
 ---
 
@@ -506,7 +506,7 @@ DataBlock block;
 for (int i = 0; i < 8; i++) {
 block.data[i] = i; // DDR4 will transfer this in one burst
 }
-``
+```
 
 ---
 
