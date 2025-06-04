@@ -522,3 +522,134 @@ block.data[i] = i; // DDR4 will transfer this in one burst
 - **16 banks** in DDR4 versus 8 in DDR3 is one of the reasons for the performance increase.  
 - **Bank Groups** accelerate access even more.  
 - **Banking conflicts** are the main enemy of productivity (avoid them!).
+
+---
+
+
+Let's **summarize everything in one powerful explanation** so that it becomes crystal clear how DDR4 works ** from BGA balls to issuing data to the processor**.  
+
+---
+
+# **1. All DDR4 interaction — from physics to software**  
+### **1.1. Level 1: Physical Enclosure (BGA)**
+- **Balls**: Contacts for signals, power and ground.  
+  - **x4/x8 chips**: 13 electrical rows.  
+  - **x16 chips**: 16 rows.  
+- **Pitch**: 0.8 mm between balls.  
+- **Depopulated columns**: Empty columns to reduce interference.  
+
+**Why**: So that the memory can be ** soldered onto a board** and signals can be transmitted without distortion.  
+
+---
+
+### **1.2. Level 2: Logical organization (Banks, Rows, Columns)**  
+- **Bank**: An independent memory block (in DDR4 there are **16** ).  
+- **Row**: Opens with the `ACTIVATE` command (on lines `A0-A17`).  
+- **Column**: Is read/written by the `READ/WRITE` command (on lines `A0-A10`).  
+
+**How ** works:
+1. **Activate the line ** in the bank → `ACTIVATE + A0-A17'.  
+2. **Read column ** → `READ + A0-A10`.  
+3. **Close the line** → `PRECHARGE'.  
+
+**Example**:
+```c
+// Pseudo-code of operation DDR4
+ddr4_send(ACTIVATE, bank=1, row=42); // Opened row 42 in bank 1
+data = ddr4_send(READ, bank=1, col=100); // Read column 100
+ddr4_send(PRECHARGE, bank=1); // Closed bank 1
+```
+
+---
+
+### **1.3. Level 3: Signals and Commands**  
+| Signal         | Description                  | Usage example                      |
+| -------------- | ---------------------------- | ---------------------------------- |
+| **CK_t/CK_c**  | Clock signals (differential) | Synchronization of all operations. |
+| **RAS/CAS/WE** | Control signals              | `ACTIVATE' (RAS=0, CAS=1, WE=1)    |
+| **DQ0-DQ63**   | Data bus (64 bits)           | Data transfer.                     |
+| **VDD/VDDQ**   | Power (core and buffers)     | 1.2 V for DDR4.                    |
+
+---
+
+### **1.4. Level 4: Memory Controller**  
+This is the **"brain"** that:  
+1. Accepts requests from the CPU ("send data to address 0xABCDEF").
+2. Translates them into DDR4 commands (`ACTIVATE`, `READ`, `PRECHARGE`).  
+3. Manages **timings** (tCL, tRCD, tRP).  
+
+**Example**:
+```c
+// Memory controller (simplified)
+void memory_controller_read(uint64_t addr) {
+    uint32_t bank = (addr >> 17) & 0xF; // Calculating the bank
+    uint32_t row = (addr >> 10) & 0x1FFFF; // Row
+    uint32_t col = addr & 0x3FF; // Column
+    
+    ddr4_activate(bank, row);
+    wait(tRCD); // Waiting for 15 ns
+    data = ddr4_read(bank, col);
+    ddr4_precharge(bank);
+}
+```
+
+---
+
+## 1.5. Level 5: How does the programmer see it?**  
+When you write in C:
+```c
+int *ptr = (int*)0x1000;
+*ptr = 42; // Write to memory
+```
+Happens:  
+1. The CPU sends a request to the memory controller.  
+2. The DDR4 controller converts this to:  
+   - `ACTIVATE` → `READ` → `PRECHARGE`.  
+3. Data goes through the DQ bus to the CPU cache.  
+
+---
+
+# **2. The final scheme of operation of DDR4**
+```
+[CPU] → [Query] → [DDR4 Controller] → [Commands (RAS/CAS/WE)] → [DDR4 Chip]  
+                     ↑                                   ↓  
+                [Timings (tCL, tRCD)]             [Banks, Rows, Columns]  
+                     ↓                                   ↑  
+[Data] ← [DQ bus] ← [BGA balls] ← [Power Supply (VDD/VDDQ)]  
+```
+
+---
+
+# **3. Example: How memory is read in reality**  
+Let's say the CPU asks to read the address `0x12345678`:  
+1. **Address is decoded**:
+- Bank = `(0x12345678 >> 17) & 0xF` = 2.  
+   - String = `(0x12345678 >> 10) & 0x1FFFF` = 0x48.  
+   - Column = `0x12345678 & 0x3FF` = 0x178.
+2. **The DDR4 controller**:
+- Sends `ACTIVATE` to bank 2, line 0x48.  
+   - Waiting for **tRCD** (15 ns).  
+   - Sends the `READ' column 0x178.  
+   - Waiting for **CL** (16 clock cycles).  
+   - Accepts data via DQ lines.
+3. **Data enters the CPU** through the cache.  
+
+---
+
+# **4. The main conclusions**  
+1. **DDR4 is not just a "RAM bar"**, but a complex hierarchy:  
+   - **Physical layer**: BGA balls, pitch, depopulated columns.  
+   - **Logical level**: Banks, rows, columns.  
+   - **Control**: RAS/CAS/WE, timings.  
+   - **Controller**: Translates CPU requests into DDR4 commands.  
+
+2. **Banks are needed for concurrency** — you can work with different banks at the same time.  
+
+3. **The programmer does not control DDR4 directly**, but understanding its operation helps to write **more efficient code** (alignment, data localization).  
+
+---
+
+# **5. What should I read to deepen?**  
+1. **JEDEC DDR4 Standard** ([JESD79-4](https://www.jedec.org/standards-documents/docs/jesd79-4 )) — the official specification.  
+2. **Architecture of memory controllers** (the book "Memory Systems: Cache, DRAM, Disk").
+3. **Code optimization for DDR4** — articles about cache-friendly design.
