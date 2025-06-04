@@ -195,7 +195,7 @@ These are **16-18 bit address lines** (depends on memory density) that indicate:
 - Banks are selected by signals **BA0-BA2** (3 bits → up to 8 banks).  
 
 #### **Example in C (imitation):**
-``c
+```c
 // DDR4 address lines (conditional)
 uint32_t ddr4_address_lines = 0;
 
@@ -223,7 +223,7 @@ This is a **data bus** (64 bits for standard DIMM):
 - On the DIMM module, the chips are combined to produce a 64-bit bus.  
 
 #### **Example in C (writing to DDR4):**
-``c
+```c
 // Writing a 64-bit word to
 void ddr4_write(uint64_t addr, uint64_t data) {
     // 1. Activate the line
@@ -252,7 +252,7 @@ void ddr4_write(uint64_t addr, uint64_t data) {
 | **WE** (Write Enable)          | Write Permission  | `WRITE` (RAS=1, CAS=0, WE=0)    |
 
 #### **Example in C (sending commands):**
-``c
+```c
 void ddr4_send_command(uint8_t cmd) {
     switch (cmd) {
         case ACTIVATE:
@@ -280,7 +280,7 @@ void ddr4_send_command(uint8_t cmd) {
 2. **Stability**: Data buffers do not affect the internal logic.  
 
 #### **Example in C (power control):**
-``c
+```c
 // Abstract voltage setting function
 void ddr4_set_voltage() {
 set_voltage(VDD, 1.2f); // Core 1.2V
@@ -309,7 +309,7 @@ set_voltage(VDDQ, 1.2f); // Buffers 1.2V
 3. **PRECHARGE** → close the bank.  
 
 #### **C code (imitation):**
-``c
+```c
 uint64_t ddr4_read(uint32_t bank, uint32_t row, uint32_t col) {
 // 1. Activating the row
     ddr4_send_command(ACTIVATE);
@@ -337,7 +337,7 @@ delay_ns(16); // CL = 16 clock cycles
 
 # **7. How does this relate to real programming?**
 ### **7.1. Memory access in Linux**
-`'c
+```c
 // mmap for accessing physical memory (example)
 int fd = open("/dev/mem", O_RDWR);
 void *mem = mmap(NULL, SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, DDR4_BASE_ADDR);
@@ -361,3 +361,164 @@ uint32_t value = *((volatile uint32_t*)mem);
 - **Power Supply (VDD/VDDQ/VSS)** — separate for core and I/O.  
 
 This is the **basic DDR4 logic** that the memory controller uses "under the hood". In real code, you don't control these signals directly (the controller does), but understanding the principles helps with optimization.
+
+**Banks in DDR4** are a key part of the memory architecture that directly affects performance. Let's figure out in detail what it is, why it is needed and how it works.  
+
+---
+
+# **1. What is a Bank in DDR4?**  
+**Bank** is an independent memory block inside a DDR4 chip that can be activated and processed **in parallel** with other banks.  
+
+### **The office analogy:**
+- **The entire DDR4 chip** is a multi—storey office.  
+- **Bank** — a separate floor (for example, 16 floors = 16 banks).  
+- **Row (Row)** — a room on the floor.  
+- **Column** is a drawer in the room.  
+
+To get the data:  
+1. Choose the ** floor (bank)** → `BA0-BA2`.  
+2. You open the ** room (row)** → `A0-A17`.  
+3. You take the ** box (column)** → `A0-A10`.  
+
+---
+
+# **2. Why do we need banks?**  
+### **2.1. Parallelism**  
+- You can **activate different banks at the same time** (but not one row in the same bank twice without closing).  
+- While one bank is processing the command, the other can start a new operation.  
+
+### **2.2. Reducing delays**  
+- If the data is distributed across banks, you can avoid **tRC** (Row Cycle Time) — the time between row activations in one bank.  
+
+### **2.3. Work efficiency**  
+- The memory controller can **switch between banks** while others are waiting for updates (**tRAS**, **tRP**).  
+
+---
+
+# **3. How many banks are in DDR4?**  
+- **Regular DDR4 chip**: **16 banks** (there were 8 in DDR3).
+- **Each bank** has its own row and column matrix.  
+
+#### **An example for a DDR4 x8 chip:**
+- **Banks**: 16 (addressable via `BA0-BA3`).  
+- **Lines**: Up To **65536 (2^16)** per bank (depends on the density).  
+- **Columns**: Up To **1024 (2^10)** per line.  
+
+---
+
+# **4. How is the bank selected?**  
+### **4.1. Bank selection signals**  
+- **BA0-BA2 (Bank Address)**: 3 bits → 8 banks (in DDR4 sometimes **BA0-BA3** for 16 banks).  
+- **BG0-BG1 (Bank Group)**: 2 bits → 4 bank groups (speeds up access).  
+
+#### **Example in C (bank selection):**
+```c
+void ddr4_activate_bank(uint8_t bank_group, uint8_t bank) {
+// Installing BG0-BG1 and BA0-BA2
+    uint8_t bg_bits = bank_group & 0x3; // 2 bits
+    uint8_t ba_bits = bank & 0x7; // 3 bits
+    printf("Select Bank Group: %u, Bank: %u\n", bg_bits, ba_bits);
+}
+```
+
+### **4.2. Bank Groups**  
+DDR4 introduces **Bank Groups** for even more parallelism:  
+- **4 groups** (BG0-BG1).  
+- There are 4 banks in each group** (BA0-BA1).  
+- You can activate rows ** in different groups almost simultaneously**.  
+
+---
+
+# **5. An example of working with banks**  
+### **5.1. The sequence of operations**  
+1. **ACTIVATE** → open row in bank 1.
+2. **READ** → read column.
+3. **ACTIVATE** → open row in bank 2 (**without waiting for tRP!**).  
+
+#### **C code (imitation):**
+```c
+void ddr4_read_two_banks() {
+    // 1. Activate row 42 in bank 1
+    ddr4_activate_bank(0, 1); // Group 0, Bank 1
+    ddr4_set_row(42);
+
+    // 2. Read column 100
+    ddr4_send_command(READ);
+    ddr4_set_col(100);
+    uint64_t data1 = read_dq_lines();
+
+    // 3. Activate line 24 in bank 2 (in parallel!)
+    ddr4_activate_bank(0, 2); // Group 0, Bank 2
+    ddr4_set_row(24);
+
+    // 4. Read column 200
+    ddr4_send_command(READ);
+    ddr4_set_col(200);
+    uint64_t data2 = read_dq_lines();
+}
+```
+
+---
+
+# **6. Bank Conflicts**  
+### **6.1. What is it?**  
+If two requests go **to the same bank**, but **have different lines**, a conflict occurs:  
+- You must first close the old line (**PRECHARGE**).  
+- Wait For **tRP** (Row Precharge Time).  
+- Only then open a new one.  
+
+### **6.2. How to avoid it?**  
+-**Distribute data across different banks**.  
+- Use **Bank Groups**.  
+
+#### **Example of a conflict:**
+```c
+// Bad: both requests to bank 1
+ddr4_activate_bank(0, 1); ddr4_set_row(10); // Request 1
+ddr4_activate_bank(0, 1); ddr4_set_row(20); // Request 2 (waiting for tRP!)
+
+// Ok: different banks
+ddr4_activate_bank(0, 1); ddr4_set_row(10); // Request 1
+ddr4_activate_bank(0, 2); ddr4_set_row(20); // Request 2 (in parallel!)
+``
+
+---
+
+# **7. How do banks affect productivity?**  
+### **7.1. Burst access**  
+DDR4 reads data ** in bursts** of 8 words (64 bytes). If the data is stored in the same bank:  
+- The first word has a delay **tRCD + CL**.  
+- The rest go in a row without delay.  
+
+### **7.2. Optimization in programming**  
+- **Alignment of structures** to match the size of the cache line (64 bytes).  
+- **Localization of data** in one bank for burst access.  
+
+#### **Example in C:**
+```c
+// Burst DDR4 alignment
+struct __attribute__((aligned(64))) DataBlock {
+    uint64_t data[8]; // 64 bytes
+};
+
+// Filling out the burst package
+DataBlock block;
+for (int i = 0; i < 8; i++) {
+block.data[i] = i; // DDR4 will transfer this in one burst
+}
+``
+
+---
+
+# **8. Useful materials**  
+1. **JEDEC DDR4 Standard** ([JESD79-4](https://www.jedec.org/standards-documents/docs/jesd79-4 )) — section about banks.  
+2. **Micron DDR4 Dataset** ([PDF](https://www.micron.com/-/media/client/global/documents/products/data-sheet/dram/ddr4/8gb_ddr4_sdram.pdf) ) — pages 30-35.
+3. **Architecture of memory controllers** — books on CPU design (for example, "Memory Systems: Cache, DRAM, Disk").  
+
+---
+
+# **Conclusion**  
+- **A bank in DDR4** is an independent block of memory that allows parallel processing of requests.  
+- **16 banks** in DDR4 versus 8 in DDR3 is one of the reasons for the performance increase.  
+- **Bank Groups** accelerate access even more.  
+- **Banking conflicts** are the main enemy of productivity (avoid them!).
