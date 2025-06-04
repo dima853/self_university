@@ -528,7 +528,6 @@ block.data[i] = i; // DDR4 will transfer this in one burst
 
 Let's **summarize everything in one powerful explanation** so that it becomes crystal clear how DDR4 works ** from BGA balls to issuing data to the processor**.  
 
----
 
 # **1. All DDR4 interaction — from physics to software**  
 ### **1.1. Level 1: Physical Enclosure (BGA)**
