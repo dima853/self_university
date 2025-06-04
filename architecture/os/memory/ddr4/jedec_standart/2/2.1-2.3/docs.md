@@ -286,7 +286,7 @@ void ddr4_set_voltage() {
 set_voltage(VDD, 1.2f); // Core 1.2V
 set_voltage(VDDQ, 1.2f); // Buffers 1.2V
 }
-``
+```
 
 ---
 
@@ -480,7 +480,7 @@ ddr4_activate_bank(0, 1); ddr4_set_row(20); // Request 2 (waiting for tRP!)
 // Ok: different banks
 ddr4_activate_bank(0, 1); ddr4_set_row(10); // Request 1
 ddr4_activate_bank(0, 2); ddr4_set_row(20); // Request 2 (in parallel!)
-``
+```
 
 ---
 
