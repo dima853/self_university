@@ -1,4 +1,4 @@
----
+
 
 # **1. Physical structure of DDR4 (BGA enclosure)**
 DDR4 memory is available in **BGA enclosures** (Ball Grid Array), where each "ball" is a contact for signal, power or ground.  
@@ -16,7 +16,7 @@ Row 0:  VDD  DQ0  DQ1  VSS  DQ2  DQ3  ...
 Row 1:  A0   A1   BA0  VDDQ A2   A3   ...  
 ...  
 Row 12: CK_t CK_c VSS VDD WE CAS ...
-` `
+```
 (This is a simplified example, the actual wiring is more complicated.)*  
 
 ### **1.2. Pitch between balls**
