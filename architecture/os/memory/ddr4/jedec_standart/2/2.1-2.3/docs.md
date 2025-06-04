@@ -111,7 +111,7 @@ ddr4_send_signal("RAS", 1);
 
     return data;
 }
-``
+```
 *(In reality, this is done by the memory controller, but this is how the logic can be modeled.)*  
 
 ---
