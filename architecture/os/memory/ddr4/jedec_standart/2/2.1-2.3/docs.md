@@ -35,7 +35,7 @@ Row 12: CK_t CK_c VSS VDD WE CAS ...
 - **Mechanical balls**: Not connected to anything, only for the rigidity of the body.  
 
 #### **Example in C (abstract BGA model):**
-``c
+```c
 #include <stdint.h>
 
 // Ball type
@@ -76,7 +76,7 @@ BGABall ddr4_x8_bga[] = {
 4. **Power Supply (VDD, VDDQ, VSS)**: Different voltages for core and I/O.  
 
 #### **Example in C: Reading from DDR4 (imitation)**
-``c
+```c
 // Let's assume that we have a function for accessing BGA contacts
 void ddr4_send_signal(const char *signal_name, uint32_t value) {
     printf("[DDR4] Set %s = %u\n", signal_name, value);
@@ -169,13 +169,195 @@ void fill_buffer() {
 
 # **6. Useful materials**
 1. **JEDEC DDR4 Standard** ([JESD79-4](https://www.jedec.org/standards-documents/docs/jesd79-4 )) — Official document.
-2. **Micron DDR4 Dataset** ([PDF](https://www.micron.com/-/media/client/global/documents/products/data-sheet/dram/ddr4/8gb_ddr4_sdram.pdf)) — real BGA templates.  
+2. **Micron DDR4 Dataset** ([PDF](https://docs.yandex.ru/docs/view?tm=1749034903&tld=ru&lang=en&name=cb-VP9MR8G7224JLLSB.pdf&text=micron.%2F-%2Fmedia%2Fclient%2Fglobal%2Fdocuments%2Fproducts%2Fdata-sheet%2Fdram%2Fddr4%2F8gb_ddr4_sdram.&url=https%3A%2F%2Fwww.micro-semiconductor.com%2Fdatasheet%2Fcb-VP9MR8G7224JLLSB.pdf&lr=213&mime=pdf&l10n=ru&sign=2066e17a74ed814403a5de428a718213&keyno=0&nosw=1&serpParams=tm%3D1749034903%26tld%3Dru%26lang%3Den%26name%3Dcb-VP9MR8G7224JLLSB.pdf%26text%3Dmicron.%2F-%2Fmedia%2Fclient%2Fglobal%2Fdocuments%2Fproducts%2Fdata-sheet%2Fdram%2Fddr4%2F8gb_ddr4_sdram.%26url%3Dhttps%253A%2F%2Fwww.micro-semiconductor.com%2Fdatasheet%2Fcb-VP9MR8G7224JLLSB.pdf%26lr%3D213%26mime%3Dpdf%26l10n%3Dru%26sign%3D2066e17a74ed814403a5de428a718213%26keyno%3D0%26nosw%3D1)) — real BGA templates.  
 3. **BGA Routing Guidelines** ([Altera](https://www.intel.com/content/www/us/en/docs/programmable/683082/21-3/pcb-layout-guidelines.html) ) — how to breed DDR4 on the board.  
 
 ---
 
-# **Conclusion**
+## **Conclusion**
 - **BGA DDR4** is a complex grid of balls, where **13 (x4/x8) or 16 (x16) rows** are used for signals, and the rest for mechanics.  
 - **Depopulated columns** are needed to reduce interference and simplify wiring.  
 - **x4/x8/x16** is the organization of the data bus inside the chip.  
 - In real code **, access to DDR4** goes through the memory controller, but understanding the physical structure helps in optimization.
+
+---
+
+# **1. Address lines (A0-A17)**
+### **What is it?**  
+These are **16-18 bit address lines** (depends on memory density) that indicate:  
+- **Row** (Row) in the bank,  
+- **Column** (Column) in the row,  
+- **Bank number** (Bank).  
+
+### **How does it work?**  
+- When the line is activated (**ACTIVATE**), the line number is sent to `A0-A17`.  
+- When reading/writing (**READ/WRITE**), the column number is sent to `A0-A10'.  
+- Banks are selected by signals **BA0-BA2** (3 bits → up to 8 banks).  
+
+#### **Example in C (imitation):**
+``c
+// DDR4 address lines (conditional)
+uint32_t ddr4_address_lines = 0;
+
+void ddr4_set_row(uint32_t row) {
+    ddr4_address_lines = row & 0x1FFFF; // A0-A17 (17 bits)
+    printf("Set ROW: 0x%X\n", ddr4_address_lines);
+}
+
+void ddr4_set_col(uint32_t col) {
+ddr4_address_lines = col & 0x3FF; // A0-A10 (10 bits)
+    printf("Set COL: 0x%X\n", ddr4_address_lines);
+}
+```
+
+---
+
+# **2. Data lines (DQ0-DQ63)**
+### **What is it?**  
+This is a **data bus** (64 bits for standard DIMM):  
+- **DQ0-DQ63** — transmit the data itself.  
+- **Data masks (DM, DBI, ECC)** — Recording/error correction management.  
+
+### **How does it work?**  
+- Each DDR4 chip has **x4, x8 or x16** DQ lines.  
+- On the DIMM module, the chips are combined to produce a 64-bit bus.  
+
+#### **Example in C (writing to DDR4):**
+``c
+// Writing a 64-bit word to
+void ddr4_write(uint64_t addr, uint64_t data) {
+    // 1. Activate the line
+    ddr4_set_row(addr >> 10);
+
+    // 2. We record the data
+    printf("Writing 0x%lX to DQ lines\n", data);
+
+    // 3. We send the WRITE signal
+    ddr4_send_command(WRITE);
+}
+```
+
+---
+
+# **3. Control signals**
+### **3.1. Clock signals (CK_t, CK_c)**
+- **CK_t** (Clock True) and **CK_c** (Clock Complementary) — differential clock frequency.  
+- DDR4 uses **both polarities** for precise synchronization.  
+
+### **3.2. Command signals (RAS, CAS, WE)**
+| Signal                         | Description       | Example of the command          |
+| ------------------------------ | ----------------- | ------------------------------- |
+| **RAS** (Row Access Strobe)    | String activation | `ACTIVATE' (RAS=0, CAS=1, WE=1) |
+| **CAS** (Column Access Strobe) | Read/Write column | `READ' (RAS=1, CAS=0, WE=1)     |
+| **WE** (Write Enable)          | Write Permission  | `WRITE` (RAS=1, CAS=0, WE=0)    |
+
+#### **Example in C (sending commands):**
+``c
+void ddr4_send_command(uint8_t cmd) {
+    switch (cmd) {
+        case ACTIVATE:
+            set_pin(RAS, 0); set_pin(CAS, 1); set_pin(WE, 1); break;
+        case READ:
+            set_pin(RAS, 1); set_pin(CAS, 0); set_pin(WE, 1); break;
+        case WRITE:
+            set_pin(RAS, 1); set_pin(CAS, 0); set_pin(WE, 0); break;
+    }
+}
+```
+
+---
+
+# **4. Power supply (VDD, VDDQ, VSS)**
+### **4.1. Main voltages**
+| Signal   | Destination                         | Typical value |
+| -------- | ----------------------------------- | ------------- |
+| **VDD**  | Memory Core power supply            | 1.2V          |
+| **VDDQ** | Power supply of output buffers (DQ) | 1.2 V         |
+| **VSS**  | Ground (GND)                        | 0 V           |
+
+### **Why separate VDD and VDDQ?**  
+1. **Noise reduction**: Separate power supply for I/O (DQ) and core.  
+2. **Stability**: Data buffers do not affect the internal logic.  
+
+#### **Example in C (power control):**
+``c
+// Abstract voltage setting function
+void ddr4_set_voltage() {
+set_voltage(VDD, 1.2f); // Core 1.2V
+set_voltage(VDDQ, 1.2f); // Buffers 1.2V
+}
+``
+
+---
+
+# **5. Additional signals**
+### **5.1. DMI (Data Mask Inverted)**
+- Inverse data mask (to save energy).  
+
+### **5.2. ODT (On-Die Termination)**
+- On-chip termination (reduces signal reflections).  
+
+### **5.3. ZQ**
+- Calibration of the output resistance.  
+
+---
+
+# **6. Full example of DDR4 operation**
+### **6.1. Read sequence**
+1. **ACTIVATE** → open the line.  
+2. **READ** → read the column.
+3. **PRECHARGE** → close the bank.  
+
+#### **C code (imitation):**
+``c
+uint64_t ddr4_read(uint32_t bank, uint32_t row, uint32_t col) {
+// 1. Activating the row
+    ddr4_send_command(ACTIVATE);
+    ddr4_set_row(row);
+    ddr4_set_bank(bank);
+
+    // 2. Reading the column (via tRCD)
+delay_ns(15); // tRCD = 15 ns
+    ddr4_send_command(READ);
+    ddr4_set_col(col);
+
+    // 3. Waiting for CL (CAS Latency)
+delay_ns(16); // CL = 16 clock cycles
+
+    // 4. Receiving data
+    uint64_t data = read_dq_lines();
+
+    // 5. Closing the bank
+    ddr4_send_command(PRECHARGE);
+    return data;
+}
+```
+
+---
+
+# **7. How does this relate to real programming?**
+### **7.1. Memory access in Linux**
+`'c
+// mmap for accessing physical memory (example)
+int fd = open("/dev/mem", O_RDWR);
+void *mem = mmap(NULL, SIZE, PROT_READ|PROT_WRITE, MAP_SHARED, fd, DDR4_BASE_ADDR);
+
+// Read/Write
+uint32_t value = *((volatile uint32_t*)mem);
+*((volatile uint32_t*)mem) = 0x12345678;
+```
+
+### **7.2. Optimization for DDR4**
+- **Data alignment** (`alignas(64)`).  
+- **Burst access** (reading blocks of 64 bytes each).  
+- **Avoiding bank conflicts** (switching banks adds delays).  
+
+---
+
+# **Conclusion**
+- **Address lines (A0-A17)** — select a memory location.  
+- **Data (DQ0-DQ63)** — transmission of information.  
+- **Control signals (RAS/CAS/WE)** — Memory commands.  
+- **Power Supply (VDD/VDDQ/VSS)** — separate for core and I/O.  
+
+This is the **basic DDR4 logic** that the memory controller uses "under the hood". In real code, you don't control these signals directly (the controller does), but understanding the principles helps with optimization.
