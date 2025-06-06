@@ -109,7 +109,7 @@ void generate_tone(double freq, double duration, FILE *file) {
     * `error("File opening error");`: Outputs an error message to the standard error stream (stderr).
     *   `return 1;`:  Terminates the program with an error code of 1 (which means that an error has occurred).
 
-``c
+```c
 // Passing the string "01" (for example)
 const char *data = "01";
     for (int i = 0; data[i] != '\0'; i++) {
@@ -177,4 +177,3 @@ This code creates an audio file `modem_signal.raw`, which contains the encoded s
 
 **Attention:** The file `modem_signal.raw` is not a standard audio file (for example, `.wav` or `.mp3'). It's just raw data representing the amplitudes of sound waves.  To listen to this file, you will need an audio editor that can import raw data. In Audacity, select "Import Raw Data" and specify the parameters (sampling rate, data format).
 
-I hope this detailed analysis helped you understand this code! If you have any more questions, do not hesitate to ask.
