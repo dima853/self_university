@@ -6,8 +6,8 @@
 Microservices are **independently deployable services** organized around a **business domain**. Each service encapsulates certain functionality and provides it to other services through **network interfaces** (for example, REST API or queues).  
 
 **Example:**  
-- Inventory service ****  
-- Order management service ****  
+- Inventory service 
+- Order management service  
 - **Delivery service**  
 Together they form **a single e-commerce system**.  
 
