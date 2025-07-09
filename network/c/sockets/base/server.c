@@ -44,8 +44,8 @@ int main() {
     }
 
     printf("Client connected!\n");
-
-    // 6. Читаем данные от клиента
+                                          
+    // 6. Читаем данные от клиента 
     char buffer[1024] = {0};
     read(client_socket, buffer, sizeof(buffer));
     printf("Client says: %s\n", buffer);
