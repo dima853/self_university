@@ -75,7 +75,7 @@ int verify(const unsigned char *key, const unsigned char *message, const unsigne
 }
 
 /*
-🧱 Why does the architecture comply with Theorem 4.6?
+🎯 Why does the architecture comply with Theorem 4.6?
 
     Construction 4.5 says:
 
