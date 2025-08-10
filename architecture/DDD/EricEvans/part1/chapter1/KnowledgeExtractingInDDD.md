@@ -91,3 +91,82 @@ It is the creativity of brainstorming and massive experimentation, leveraged thr
 language and disciplined by the feedback loop through implementation, that makes it possible to 
 find a knowledge-rich model and distill it. This kind of knowledge crunching turns the knowledge 
 of the team into valuable models.
+
+---
+
+# 🔍 **Knowledge Recycling: An Example of Domain-Driven Design (DDD) in Action**
+
+This case study shows how **Domain-Driven Design** helped bridge the gap between developers and domain experts (PCB design). Here are the key findings:
+
+## 🧩 **Problem and Solution**
+- **Challenge**: A developer without electronics knowledge must create software for designing printed circuit boards
+- **Breakthrough**: Co-modeling with experts yielded:
+- A common language ("nets", "component instances")
+- A working domain model
+- A prototype that became a "living" document
+
+## 🛠 **How it worked in practice**
+1. **Modeling via diagrams**
+
+Experts corrected the developer's diagrams, clarifying the terms:
+```mermaid
+classDiagram
+class Net {
++signal(int)
+}
+class ComponentInstance {
++signal(int)
+}
+class Pin {
++signal(int)
+}
+ComponentInstance "1" *-- "*" Pin
+Net "1" -- "*" Pin
+```
+
+2. **Focus on specific features**
+For example, "probe simulation" for signal delay analysis:
+- Signal goes through Net → Pin → Component → Pin → Net...
+- Each Net = +1 "hop"
+- If hops > 3 → potential problem
+
+3. **Working prototype in days**
+Without UI and database, but with:
+- Real logic for calculating the signal path
+- Tests that check the domain logic
+
+## 💡 **Why did it work?**
+1. **Early binding of the model to the code**
+The prototype immediately showed how abstractions work in practice.
+
+2. **Model-based language**
+Terms like "component instance" became a bridge between teams.
+
+3. **Model = source of knowledge**
+Objects didn't just store data - they knew the rules of the domain:
+```java
+public class Net {
+public void signal(int hopCount) {
+pins.forEach(pin -> pin.signal(hopCount + 1));
+}
+}
+```
+
+4. **Constant distillation**
+Removed unnecessary things (for example, Topology for probe simulation), focusing on the main thing.
+
+5. **Collaborative "crash testing" of ideas**
+Hundreds of quick iterations via:
+- Discussions
+- Sketches
+- Object interaction scenarios
+
+## 📚 **Main lessons**
+- **Not a waterfall**: Knowledge should circulate between all participants
+- **Not "just make a feature"**: Without understanding the domain, the software will be superficial
+- **Prototypes > documents**: Working code is better than 100 pages of specifications
+
+> **Methodology**: DDD is not about tools, but about *a culture of shared learning*. As the author said: "Efficient domain modelers are knowledge processors."
+
+Case example:
+When experts said "ref-des" and the developer did not understand, this led to a clarification of the term ("the same as component instance") and cleaning up the model language.
