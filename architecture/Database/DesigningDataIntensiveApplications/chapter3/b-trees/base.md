@@ -14,7 +14,7 @@ echo "$1,$2" >> database # Just adding the key and value to the file }
 db_get() {
 grep "^$1," database | sed -e "s/^$1,//" | tail -n 1 # Searching for the last key value
 }
-``  
+```  
 
 ### 🎯 **How does it work?**  
 - **`db_set`** saves the key and value to the `database` file.  
