@@ -151,7 +151,24 @@ flowchart TD
 - **PVID** (Port VLAN ID): Default VLAN for untagged frames
 - **PPVID** (Port and Protocol VLAN ID): Protocol-based VLAN assignment
 
+<<<<<<< HEAD
 ### **8. Standards Bodies**
 - **IANA** (Internet Assigned Numbers Authority): Ethertype assignments
 - **IEEE** (Institute of Electrical and Electronics Engineers): Standards development
  
+=======
+### **Phase 8: Maintenance & Monitoring**
+22. **Counters & Statistics** (RMON, port counters, error tracking)
+23. **Aging Processes** (MAC table entry timeout)
+24. **Topology Updates** (Dynamic response to network changes)
+
+## **Key L2 Protocols & Standards:**
+- **MAC Addressing**: IEEE 802.3 (Ethernet)
+- **VLANs**: IEEE 802.1Q
+- **STP**: IEEE 802.1D
+- **LACP**: IEEE 802.3ad
+- **LLDP**: IEEE 802.1AB
+- **QoS**: IEEE 802.1p
+
+This sequence represents the complete lifecycle of a frame at Layer 2, from physical reception through processing to final transmission, including all critical decision points and protocol interactions.
+>>>>>>> ec1c315587d6dea9cdf0fe41d8a04e7bcf1b0263
