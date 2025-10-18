@@ -430,6 +430,7 @@ This header provides:
 3. **Internal Processing** - State machines for SET operations
 4. **ASN.1 Utilities** - Encoding/decoding functions
 5. **MIB Management** - Row status, storage types, OID bases
+---
 
 # How It Works? (Super Briefly)
 
@@ -598,5 +599,5 @@ flowchart TD
     class E,E1,E2,E11,E12,E13,E14,E21,E22,E23,E24 pdu
     class L,L1,L2,L3,L4,L11,L21,L22,L23,L31,L32,L33,L41,L42,L43 security
     class H,I,I1,I2,I11,I12,I13,I14,I15,I16,I21,I22,I23,I24 error
-    class F,F1,F11,F12,F13,F14,F15,F16,F17 internal
+    class F,F1,F11,F12,F13,F14,F15,F16,F17 internal 
 ```
