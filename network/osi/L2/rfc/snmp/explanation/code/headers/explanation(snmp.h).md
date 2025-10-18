@@ -433,3 +433,4 @@ This header provides:
 ---
 
 # How It Works? (Super Briefly)
+<img width="18804" height="2464" alt="Untitled diagram-2025-10-18-115602" src="https://github.com/user-attachments/assets/905f9d59-bed6-468b-ab1a-08045f185ea2" />
