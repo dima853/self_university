@@ -13,27 +13,44 @@ extern "C"
 
 **Purpose:** Standard C header guards to prevent multiple inclusions and ensure C++ compatibility.
 
-**This is the best practice.**
+**This approach is widely considered a best practice.**
 
-The combination of `#pragma once` and the classic `#ifndef'-sentinel is the most reliable and portable approach to protect against multiple inclusion of header files.
+The combination of `#pragma once` and the classic `#ifndef` provides a balanced approach to protect against multiple inclusion of header files, though the actual benefits may vary depending on the specific use case.
 
-### Why is this the best practice:
+### Why this approach is commonly recommended:
 
-1. **`#pragma once` - Speed and convenience**
-    * **Faster**: It is easier for the compiler to check whether a file has already been included using its unique path than to compare all macros through the preprocessor.
-    * **More convenient**: You don't need to come up with a unique name for the guardian macro (in your case, `SNMP_H`).
-    * **Fewer errors**: It is impossible to accidentally use the same macro name in two different files.
+1. **`#pragma once` - Potential speed and convenience**
+    * **May be faster in some scenarios**: On projects with complex include hierarchies, some compilers can optimize file processing using filesystem metadata.
+    * **Convenience factor**: Avoids the need to maintain unique macro names across the codebase.
+    * **Reduced naming conflicts**: Eliminates potential macro name collisions between different headers.
 
-2. **`#ifndef` / `#define` - Portability**
-* **Absolute portability**: The directive `#ifndef` is a C/C++ language standard and **is guaranteed to work on any compiler** conforming to the standard.
-    * **Backup**: `#pragma once` is a non-standard but widespread extension. If you use both methods, and for some reason the compiler does not support `#pragma once`, the sentinel macro will reliably pick up and protect the file.
+2. **`#ifndef` / `#define` - Portability and reliability**
+    * **Wide portability**: The `#ifndef` directive is a C/C++ language standard that should work on any compliant compiler.
+    * **Fallback protection**: Provides a reliable alternative when `#pragma once` support is limited or encounters unusual filesystem situations.
 
-### How it works in practice:
+### Performance Observations from Testing:
 
-* **Smart compiler** (GCC, Clang, MSVC and other modern ones): It will see `#pragma once`, remember the file and will not even check the `#ifndef` block, since it already knows that the file is included. This gives maximum performance.
-* **An old or exotic compiler** (which does not know `#pragma once`): Ignores this directive (as well as any unknown `pragma`) and proceeds to check the macro `#ifndef SNMP_H'. Since the macro has not yet been defined, the code will be enabled and protected in a standard way.
+Our limited testing showed mixed results that may not be representative of all scenarios:
 
-# Prove - https://github.com/dima853/self_university/tree/main/network/c/compatibility/ifndef_pragmaonce
+- **Small to medium files**: Performance differences were generally minor (0.01-0.05s)
+- **Larger inclusion scenarios**: Some tests showed `#pragma once` with modest improvements
+- **Combined approach**: Performance was comparable to either method alone in most cases
+
+**Note**: The actual performance impact likely depends on many factors including compiler implementation, filesystem characteristics, project structure, and build environment. The benefits may be more significant in very large projects with complex include graphs.
+
+### Practical Considerations:
+
+* **Modern compiler behavior**: Most contemporary compilers (GCC, Clang, MSVC) recognize `#pragma once` while maintaining `#ifndef` compatibility
+* **Compiler variations**: Some compilers may optimize the combined approach differently than others
+* **Edge case handling**: The dual approach may provide additional safety in unusual environments like network filesystems or with symbolic links
+
+### Conservative Recommendation:
+
+This combined approach represents a reasonable compromise that prioritizes compatibility while potentially offering performance benefits in some situations. For maximum portability across diverse build environments, the additional `#ifndef` guard provides insurance against `#pragma once` limitations in edge cases.
+
+The minimal overhead of including both directives appears to be acceptable for most practical purposes, though individual projects should consider their specific requirements and target environments.
+
+# Implementation Details & Testing - https://github.com/dima853/self_university/tree/main/network/c/compatibility/ifndef_pragmaonce
 
 ---
 

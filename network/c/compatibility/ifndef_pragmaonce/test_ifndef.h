@@ -1,8 +1,4 @@
-#ifndef TEST_H
-#define TEST_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-// много include...
-int foo() { return 42; }
+#ifndef TEST_IFNDEF_H
+#define TEST_IFNDEF_H
+int foo_ifndef();  // только объявление!
 #endif
