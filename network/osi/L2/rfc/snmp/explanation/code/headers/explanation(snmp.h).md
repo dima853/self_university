@@ -33,7 +33,7 @@ The combination of `#pragma once` and the classic `#ifndef'-sentinel is the most
 * **Smart compiler** (GCC, Clang, MSVC and other modern ones): It will see `#pragma once`, remember the file and will not even check the `#ifndef` block, since it already knows that the file is included. This gives maximum performance.
 * **An old or exotic compiler** (which does not know `#pragma once`): Ignores this directive (as well as any unknown `pragma`) and proceeds to check the macro `#ifndef SNMP_H'. Since the macro has not yet been defined, the code will be enabled and protected in a standard way.
 
-# Prove - 
+# Prove - https://github.com/dima853/self_university/tree/main/network/c/compatibility/ifndef_pragmaonce
 
 ---
 
