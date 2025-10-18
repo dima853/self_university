@@ -1,0 +1,9 @@
+#pragma once
+#ifndef TEST_BOTH_H
+#define TEST_BOTH_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// много include...
+int foo() { return 42; }
+#endif

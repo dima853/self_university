@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SNMP_H
 #define SNMP_H
 
