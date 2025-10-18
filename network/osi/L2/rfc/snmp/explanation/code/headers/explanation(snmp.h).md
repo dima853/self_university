@@ -434,3 +434,149 @@ This header provides:
 
 # How It Works? (Super Briefly)
 <img width="18804" height="2464" alt="Untitled diagram-2025-10-18-115602" src="https://github.com/user-attachments/assets/905f9d59-bed6-468b-ab1a-08045f185ea2" />
+
+
+## 🛡️ **Security Levels (SNMPv3 Security Levels)**
+
+### **L31: noAuthNoPriv (Level 1)**
+```c
+#define SNMP_SEC_LEVEL_NOAUTH 1
+```
+**What is it:** Without authentication and encryption  
+**How it works:** 
+- 🤡 Anonymous access
+- Messages are not subscribed
+- 🔓 Data is transmitted in clear text
+- 💀 **DANGEROUS!** Only for test networks
+
+### **L32: authNoPriv (Level 2)** 
+```c
+#define SNMP_SEC_LEVEL_AUTHNOPRIV 2
+```
+**What is it:** Authentication without encryption
+**How it works:**
+- ✅ User verification (login/password)
+- 🔐 HMAC-MD5 or HMAC-SHA for signature
+- 📨 Data is NOT encrypted
+- Protection against spoofing, but the data is visible
+
+### **L33: authPriv (Level 3)**
+```c
+#define SNMP_SEC_LEVEL_AUTHPRIV 3
+```
+**What is it:** Authentication + Encryption
+**How it works:**
+- ✅ User verification
+- 🔐 Message signature
+- 🚫 Data encryption (DES, AES)
+- 💪 **MAXIMUM PROTECTION**
+
+---
+
+## 📨 **PDU Types (Message Types)**
+
+### **Core Operations**
+- **E11: GET (160)** - "Give the value of this variable"
+- **E12: GETNEXT (161)** - "Give the following variable in the MIB tree"
+- **E14: SET (163)** - "Change the value of a variable"
+- **E13: RESPONSE (162)** - "Reply to any request"
+
+### **Advanced Operations**
+- **E21: GETBULK (165)** - "Give a lot of data at once" (optimization)
+- **E22: INFORM (166)** - "Confirmation Notification"
+- **E23: TRAPv2 (167)** - "Notification without confirmation"
+- **E24: REPORT (168)** - "Error message between engines"
+
+---
+
+## ⚙️ **Internal Processing (Internal SET Processing)**
+
+**F1: SET State Machine** - as a database transaction:
+
+```
+BEGIN → RESERVE1 → RESERVE2 → ACTION → COMMIT → FREE
+                               UNDO (if an error occurs)
+```
+
+**Why do I need to:**
+- `RESERVE1/RESERVE2` - booking resources
+- `ACTION` - making the change
+- `COMMIT` - confirm
+- `UNDO` - rollback if an error occurs
+- `FREE` - freeing up resources
+
+---
+
+## ❌ **Exception Values**
+
+**When the variable is not found:**
+- **H1: noSuchObject (128)** - "There is no such object"
+- **H2: noSuchInstance (129)** - "There is no such instance"  
+- **H3: endOfMibView (130)** - "There is nothing further in the tree"
+
+---
+
+## 🚨 **Error Status Codes**
+
+### **Basic Errors**
+- **I11: noError (0)** - Everything is ok
+- **I12: tooBig (1)** - The response is too big
+- **I13: noSuchName (2)** - Variable not found
+- **I14: BadValue (3)** - Incorrect value
+- **I15: readOnly (4)** - Attempt to change read-only
+- **I16: genErr(5)** - Common error
+
+### **Extended Errors**
+- **I21: noAccess (6)** - No access rights
+- **I22: wrongType (7)** - Incorrect data type
+- **I23: wrongLength (8)** - Wrong length
+- ... etc. up to 18
+
+---
+
+## 🗃️ **Row Status (Row statuses of tables)**
+
+**For dynamic table management:**
+```c
+nonExistent → createAndWait → notInService → active → destroy
+               createAndGo ────────────────┘
+```
+
+- **J1: nonExistent** - The row does not exist
+- **J4/J5: createAndWait/createAndGo** - Create a string
+- **J3: notInService** - Created but not active  
+- **J2: active** - Active and running
+- **J7: destroy** - Delete line
+
+---
+
+## 💾 **Storage Types**
+
+**How long does the data persist?:**
+- **K1: none** - Is not saved at all
+- **K3: volatile** - In memory only (disappears after reboot)
+- **K4: nonVolatile** - Persists between reboots
+- **K5: permanent** - Cannot be deleted
+- **K6: readonly** - Read-only
+
+---
+
+## 🌳 **OID Structure (Object Tree)**
+
+```
+1.3.6.1 (internet)
+├── 2.1 (mib-2) # Standard MIB objects
+├── 4.1 (enterprises)     # Vendor extensions
+6 (SNMPv2) # SNMPv2 features
+```
+
+**Each variable in the network has a unique OID!**
+
+---
+
+## 🔧 **Core Functions**
+
+- **N11: uptime_string()** - Converts time to beautiful text
+- **N12: xdump()** - Shows data in hex format
+- **N21: snmp_parse_var_op()** - Parses ASN.1 data
+- **N22: snmp_build_var_op()** - Creates an ASN.1 data
