@@ -268,7 +268,7 @@ But it's a shit code, here's the correct code.
     } SnmpPduType;
 ```
 
- Cheat sheet: Macro vs Enum vs Constant
+# Cheat sheet: Macro vs Enum vs Constant
 
 ## 🎯 **The Quick Rule:**
 - **Macro** ← Only for text substitutions and conditional compilation
