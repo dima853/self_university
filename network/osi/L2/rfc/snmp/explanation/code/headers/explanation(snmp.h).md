@@ -239,6 +239,147 @@ Assignee: Marshall Rose
 #define SNMP_MIN_MSG_SIZE 484           // RFC 3416 minimum
 #define SNMP_MAX_PACKET_SIZE 0x7FFFFFFF // Maximum theoretical size
 ```
+But it's a shit code, here's the correct code.
+
+```c
+    // ==================== SNMP Port Constants ====================
+    extern const uint16_t SNMP_PORT;      // SNMP agent request port
+    extern const uint16_t SNMP_TRAP_PORT; // SNMP manager notification port
+
+    // ==================== SNMP Size Constants ====================
+    extern const size_t SNMP_MAX_MSG_SIZE;     // Ethernet MTU
+    extern const size_t SNMP_MIN_MSG_SIZE;     // RFC 3416 minimum
+    extern const int32_t SNMP_MAX_PACKET_SIZE; // Maximum theoretical size
+
+    // ==================== Protocol Version ====================
+    static const int SNMP_VERSION_3 = 3; // SNMPv3
+
+    // ==================== PDU Type Constants ====================
+    typedef enum
+    {
+        SNMP_PDU_GET = 0xA0,      // 160 - GetRequest
+        SNMP_PDU_GETNEXT = 0xA1,  // 161 - GetNextRequest
+        SNMP_PDU_RESPONSE = 0xA2, // 162 - Response
+        SNMP_PDU_SET = 0xA3,      // 163 - SetRequest
+        SNMP_PDU_GETBULK = 0xA5,  // 165 - GetBulkRequest
+        SNMP_PDU_INFORM = 0xA6,   // 166 - InformRequest
+        SNMP_PDU_TRAP2 = 0xA7,    // 167 - SNMPv2-Trap
+        SNMP_PDU_REPORT = 0xA8    // 168 - Report
+    } SnmpPduType;
+```
+
+ Cheat sheet: Macro vs Enum vs Constant
+
+## 🎯 **The Quick Rule:**
+- **Macro** ← Only for text substitutions and conditional compilation
+- **Enum** ← A group of related values (versions, statuses, types)
+- **The constant** ← Single numbers, strings, sizes
+
+---
+
+## 🚫 **MACROS** - only when THE OTHER IS NOT POSSIBLE:
+
+### ✅ **FITS:**
+```c
+// 1. Text substitutions for initialization
+#define OID_INTERNET 1, 3, 6, 1
+uint32_t oid[] = {OID_INTERNET, 1, 0};
+
+// 2. Conditional compilation
+#define DEBUG_MODE
+#ifdef DEBUG_MODE
+    // debug code
+#endif
+
+// 3. Macros-functions (carefully!)
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+```
+
+### ❌ **This doesn't fit:**
+```c
+#define PORT 161 // ← BAD
+#define TIMEOUT 5000 // ← BAD  
+#define VERSION 3 // ← BAD
+```
+
+---
+
+## 🔢 **ENUM** - for GROUPS of related values:
+
+### ✅ **FITS:**
+```c
+// Protocol versions
+typedef enum {
+    SNMP_V1 = 0,
+    SNMP_V2C = 1, 
+    SNMP_V3 = 3
+} SnmpVersion;
+
+// Types of messages
+typedef enum {
+    PDU_GET = 0xA0,
+    PDU_GETNEXT = 0xA1,
+    PDU_RESPONSE = 0xA2
+} PduType;
+
+// Statuses/errors
+typedef enum {
+    STATUS_OK = 0,
+    STATUS_ERROR = -1,
+    STATUS_TIMEOUT = -2
+} StatusCode;
+```
+
+### ❌ **This doesn't fit:**
+```c
+enum { MAX_SIZE = 1500 };  // ← Single value
+enum { PI = 3.14159 }; // ← Non-integers
+```
+
+---
+
+## 🔧 **CONSTANT** - for single values:
+
+### ✅ **FITS:**
+```c
+// Ports
+static const uint16_t SNMP_PORT = 161;
+static const uint16_t TRAP_PORT = 162;
+
+// Buffer sizes
+static const size_t MAX_MSG_SIZE = 1500;
+static const size_t MIN_MSG_SIZE = 484;
+
+// Timeouts
+static const unsigned long TIMEOUT_MS = 5000;
+
+// Mathematical constants
+static const double PI = 3.14159;
+```
+
+### ❌ **This doesn't fit:**
+```c
+const int VERSION_1 = 0, VERSION_2 = 1; // ← Is better than enum
+```
+
+---
+
+## 🎪 **EXCEPTIONS:**
+
+### **Macros-aliases - ALWAYS:**
+```c
+#define MSG_GET PDU_GET // ← USELESS GARBAGE
+#define PORT_161 161 // ← HORROR
+```
+
+### **Legacy code - temporarily:**
+```c
+#define OLD_CONSTANT 123 // ← Refactor when there is time
+```
+
+**The main rule:** If you can use a typed constant or enum, USE THEM! 🚀
+
+---
 
 ## 1) 📄 From RFC 894 (IP over Ethernet):
 
