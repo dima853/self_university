@@ -294,6 +294,14 @@ uint32_t oid[] = {OID_INTERNET, 1, 0};
 // 3. Macros-functions (carefully!)
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 ```
+### For macro functions:
+```c
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+```
+**Problem:** calculates arguments twice, it may not be safe. In modern C, it is better to use inline functions:
+``c
+static inline int max_int(int a, int b) { return(a > b) ? a : b; }
+```
 
 ### ❌ **This doesn't fit:**
 ```c
