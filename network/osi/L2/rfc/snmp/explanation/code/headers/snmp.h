@@ -31,15 +31,6 @@ extern "C"
         SNMP_PDU_REPORT = 0xA8    // 168 - Report
     } SnmpPduType;
 
-#define SNMP_MSG_GET SNMP_PDU_GET
-#define SNMP_MSG_GETNEXT SNMP_PDU_GETNEXT
-#define SNMP_MSG_RESPONSE SNMP_PDU_RESPONSE
-#define SNMP_MSG_SET SNMP_PDU_SET
-#define SNMP_MSG_GETBULK SNMP_PDU_GETBULK
-#define SNMP_MSG_INFORM SNMP_PDU_INFORM
-#define SNMP_MSG_TRAP2 SNMP_PDU_TRAP2
-#define SNMP_MSG_REPORT SNMP_PDU_REPORT
-
     // ==================== Internal Processing States ====================
     typedef enum
     {
