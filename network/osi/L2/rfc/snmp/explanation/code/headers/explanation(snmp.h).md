@@ -359,7 +359,7 @@ static const double PI = 3.14159;
 
 ### ❌ **This doesn't fit:**
 ```c
-const int VERSION_1 = 0, VERSION_2 = 1; // ← Is better than enum
+const int VERSION_1 = 0, VERSION_2 = 1; // ← Is worse than enum
 ```
 
 ---
