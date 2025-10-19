@@ -239,6 +239,39 @@ Assignee: Marshall Rose
 #define SNMP_MIN_MSG_SIZE 484           // RFC 3416 minimum
 #define SNMP_MAX_PACKET_SIZE 0x7FFFFFFF // Maximum theoretical size
 ```
+But it's a shit code, here's the correct code.
+
+```c
+    // ==================== SNMP Port Constants ====================
+    extern const uint16_t SNMP_PORT;      // SNMP agent request port
+    extern const uint16_t SNMP_TRAP_PORT; // SNMP manager notification port
+
+    // ==================== SNMP Size Constants ====================
+    extern const size_t SNMP_MAX_MSG_SIZE;     // Ethernet MTU
+    extern const size_t SNMP_MIN_MSG_SIZE;     // RFC 3416 minimum
+    extern const int32_t SNMP_MAX_PACKET_SIZE; // Maximum theoretical size
+
+    // ==================== Protocol Version ====================
+    static const int SNMP_VERSION_3 = 3; // SNMPv3
+
+    // ==================== PDU Type Constants ====================
+    typedef enum
+    {
+        SNMP_PDU_GET = 0xA0,      // 160 - GetRequest
+        SNMP_PDU_GETNEXT = 0xA1,  // 161 - GetNextRequest
+        SNMP_PDU_RESPONSE = 0xA2, // 162 - Response
+        SNMP_PDU_SET = 0xA3,      // 163 - SetRequest
+        SNMP_PDU_GETBULK = 0xA5,  // 165 - GetBulkRequest
+        SNMP_PDU_INFORM = 0xA6,   // 166 - InformRequest
+        SNMP_PDU_TRAP2 = 0xA7,    // 167 - SNMPv2-Trap
+        SNMP_PDU_REPORT = 0xA8    // 168 - Report
+    } SnmpPduType;
+```
+
+# Cheat sheet: Macro vs Enum vs Constant
+IMPORTANT ! https://gist.github.com/dima853/73ba55e23210efe880349a99fb6b904c
+## use it as a REMINDER, not as a guide!
+---
 
 ## 1) 📄 From RFC 894 (IP over Ethernet):
 
