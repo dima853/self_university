@@ -8,21 +8,30 @@
 #include <bpf/libbpf.h>
 #include <bpf/bpf.h>
 #include <linux/if_link.h>
+#include <net/if.h>
 
 #ifndef IFNAMSIZ
 #define IFNAMSIZ 16
 #endif
 
+struct stats {
+    __u64 total_packets;
+    __u64 blocked_packets;
+};
+
 int main(int argc, char **argv)
 {
     struct bpf_object *obj;
-    int prog_fd, block_map_fd, stats_map_fd;
+    struct bpf_program *prog;
+    struct bpf_link *link = NULL;
+    int block_map_fd, stats_map_fd;
     int ifindex;
-    char ifname[IFNAMSIZ] = "eth0"; // Интерфейс по умолчанию
+    char ifname[IFNAMSIZ] = "eth0";
 
     if (argc > 1)
     {
         strncpy(ifname, argv[1], IFNAMSIZ - 1);
+        ifname[IFNAMSIZ - 1] = '\0';
     }
 
     // Загружаем eBPF программу
@@ -39,10 +48,22 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // Получаем файловые дескрипторы
-    prog_fd = bpf_program__fd(bpf_object__find_program_by_name(obj, "firewall"));
+    // Получаем программу
+    prog = bpf_object__find_program_by_name(obj, "firewall");
+    if (!prog)
+    {
+        fprintf(stderr, "❌ Не найдена программа 'firewall'\n");
+        return 1;
+    }
+
     block_map_fd = bpf_object__find_map_fd_by_name(obj, "block_list");
     stats_map_fd = bpf_object__find_map_fd_by_name(obj, "stats_map");
+
+    if (block_map_fd < 0 || stats_map_fd < 0)
+    {
+        fprintf(stderr, "❌ Не удалось найти maps\n");
+        return 1;
+    }
 
     // Получаем индекс интерфейса
     ifindex = if_nametoindex(ifname);
@@ -53,9 +74,11 @@ int main(int argc, char **argv)
     }
 
     // Прикрепляем XDP программу к интерфейсу
-    if (bpf_set_link_xdp_fd(ifindex, prog_fd, 0) < 0)
+    link = bpf_program__attach_xdp(prog, ifindex);
+    if (!link)
     {
         fprintf(stderr, "❌ Ошибка прикрепления XDP к %s\n", ifname);
+        fprintf(stderr, "⚠️  Попробуй запустить с sudo\n");
         return 1;
     }
 
@@ -69,7 +92,7 @@ int main(int argc, char **argv)
     // Командный интерфейс
     char command[64];
     char ip_str[INET_ADDRSTRLEN];
-    __be32 ip_addr;
+    __u32 ip_addr;
 
     while (1)
     {
@@ -77,12 +100,10 @@ int main(int argc, char **argv)
         if (!fgets(command, sizeof(command), stdin))
             break;
 
-        // Убираем символ новой строки
         command[strcspn(command, "\n")] = 0;
 
         if (strncmp(command, "block ", 6) == 0)
         {
-            // Блокируем IP
             strcpy(ip_str, command + 6);
             if (inet_pton(AF_INET, ip_str, &ip_addr) != 1)
             {
@@ -102,7 +123,6 @@ int main(int argc, char **argv)
         }
         else if (strncmp(command, "unblock ", 8) == 0)
         {
-            // Разблокируем IP
             strcpy(ip_str, command + 8);
             if (inet_pton(AF_INET, ip_str, &ip_addr) != 1)
             {
@@ -121,7 +141,6 @@ int main(int argc, char **argv)
         }
         else if (strcmp(command, "stats") == 0)
         {
-            // Показываем статистику
             __u32 key = 0;
             struct stats stats = {0};
 
@@ -136,6 +155,10 @@ int main(int argc, char **argv)
                            (double)stats.blocked_packets * 100 / stats.total_packets);
                 }
             }
+            else
+            {
+                printf("❌ Не удалось получить статистику\n");
+            }
         }
         else if (strcmp(command, "exit") == 0)
         {
@@ -148,7 +171,12 @@ int main(int argc, char **argv)
     }
 
     // Открепляем программу при выходе
-    bpf_set_link_xdp_fd(ifindex, -1, 0);
+    if (link)
+    {
+        bpf_link__destroy(link);
+    }
+    bpf_object__close(obj);
+    
     printf("\n🛑 Фаервол остановлен\n");
 
     return 0;
