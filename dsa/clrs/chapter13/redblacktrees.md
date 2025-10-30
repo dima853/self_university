@@ -178,7 +178,7 @@ From node 26 to any leaf:
 > A red-black tree with `n` internal nodes has height at most `2 lg(n + 1)`.
 
 In mathematical terms, if we let `h` be the height of the tree:
-$$ h \leq 2 \log_2(n + 1) $$
+$$h \leq 2 \log_2(n + 1)$$
 This guarantees the tree remains approximately balanced, as its height grows only logarithmically with the number of nodes. 
 > Just the boundaries
 
