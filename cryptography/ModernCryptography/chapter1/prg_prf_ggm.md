@@ -1,94 +1,83 @@
-### Псевдослучайные генераторы: когда короткий секрет создает длинную случайность
+### Why is all this needed? PRG | PRF | GGM
 
-**Суть проблемы**  
-Настоящая случайность — дорогой ресурс. Генерировать аппаратно миллионы битов для шифрования — медленно и неэффективно.  
+*This article may have inaccuracies; study this to get a general understanding of what it is.*
 
-**Решение**  
-Берем короткое *истинно случайное* значение — **seed** (зерно) — и «растягиваем» его в длинную псевдослучайную последовательность. Алгоритм, который это делает, называется **PRG**.  
+There is a task: to encrypt data, random bits are needed. Lots of them. Generating true randomness is a slow and expensive thing.
+> ...a slow and expensive thing.
+>
+**Clarification:** This is true for *high-quality* entropy. Modern CPUs have instructions like RDRAND, but for cryptography, multiple entropy sources (timings, ADC noise) are often combined, which indeed requires time to accumulate a sufficient number of bits.
 
-**Ключевое требование**  
-Выход PRG должен быть **неотличим от истинно случайной строки** для любого, кто не знает исходный seed. Никаких статистических аномалий, никаких паттернов — только хаос, который проходит все тесты на случайность.  
+At the same time, in many algorithms (encryption, authentication) we don't need randomness "in a vacuum" — we need the result to *look* random to anyone who doesn't have the secret key.
 
----
-
-### Формальные критерии
-
-1. **Расширение (Expansion)**  
-   Длина выхода `l(n)` должна быть строго больше длины входа `n`.  
-   *Иначе какой смысл?*
-
-2. **Псевдослучайность (Pseudorandomness)**  
-   Для любого эффективного алгоритма-различителя `D` вероятность отличить вывод `G(s)` от истинно случайной строки должна быть пренебрежимо малой:  
-
-   ```                                          
-   | Pr[D(G(s)) = 1] - Pr[D(r) = 1] | ≤ negl(n)
-   ```
-
-   где `s` — случайный seed, `r` — истинно случайная строка.
+This gives rise to two basic concepts.
 
 ---
 
-### Почему это работает не для всех
+### PRG — Stretching Randomness
 
-Рассмотрим пример **нестойкого PRG**:  
-`G(s) = s || (s[0] ⊕ s[1] ⊕ ... ⊕ s[n-1])`  
-Мы просто добавляем к seed'у XOR всех его битов.
+**Problem**: we have a small amount of "true" randomness (e.g., 256 bits), but need a lot (gigabytes).
 
-Такой генератор ломается элементарно:  
-- Для выхода `G(s)` последний бит *всегда* равен XOR предыдущих битов  
-- Для случайной строки это верно лишь в половине случаев  
+**Solution**: take a short random **seed** and pass it through a deterministic algorithm that outputs a long pseudorandom sequence.
 
-Любой различитель легко заметит эту закономерность. Настоящий PRG не должен оставлять таких следов.
+**Requirement**: the output must be *computationally* indistinguishable from a truly random string for anyone who doesn't know the seed. No statistical anomalies, no patterns.
+> The key word is "computationally" - meaning there is no efficient algorithm that can distinguish them in polynomial time.
 
----
+**Analogy**: if you are given two sheets with numbers — one with PRG output, the other with true randomness — you won't be able to tell which is which.
+> Remember: truly random bits are the gold standard we aim for when creating cryptographic keys and seeds. PRG and PRF are cryptographic primitives that must be computationally indistinguishable from this standard for anyone without the secret key.
 
-### Философский парадокс
-
-Распределение выходов PRG **категорически не равномерно**.  
-Если `G` удваивает длину (`l(n) = 2n`), то:
-- Возможных выходов: `2^(2n)`  
-- Доступных выходов: не более `2^n`  
-- Вероятность случайно попасть в диапазон `G`: `2^n / 2^(2n) = 2^(-n)`
-
-Получается, большинство строк длины `2n` никогда не появятся на выходе генератора. Но вся хитрость в том, что **полиномиальный противник не может этого заметить**. 
-
-Если бы у нас было неограниченное время, мы бы легко отличали псевдослучайные строки от истинно случайных. Но в реальном мире время — наш главный союзник.
+**Important**: if the seed is known, the entire pseudorandom sequence can be reproduced. Security relies on the secrecy of the seed and the **strength of the PRG itself**. If the PRG is vulnerable, the output can be predicted even with a secret seed.
 
 ---
 
-### Практические следствия
+### PRF — Pseudorandom Functions
 
-**Длина seed'а** — как криптографический ключ:
-- Должна быть достаточной, чтобы перебор `2^n` вариантов был невозможен
-- Должна храниться в секрете — знание seed'а полностью вскрывает генератор
+**Problem**: we need not just to generate numbers, but to get a "random" result for each input. For example, for message authentication.
 
-**Существование PRG** — открытый вопрос, но:
-- Есть практические кандидаты (поточные шифры)
-- Теоретически можно построить из односторонних функций
-- Для большинства приложений достаточно предположения, что они существуют
+**Solution**: a function that, given a key and an arbitrary message, outputs a pseudorandom value.
+
+**Requirement**: even knowing millions of "input-output" pairs, one cannot predict the value for a new input without the key.
+
+**Analogy**: you have a magic box with a setting (the key). For each query, it gives a random-looking answer. Even if you've seen millions of answers to other queries, you won't guess the answer to a new one.
+
+**Important**: PRF is a cryptographic function family that behaves almost indistinguishably from a perfectly random function for anyone without the key. MACs, key derivation schemes, and much more are built on PRFs.
 
 ---
 
-**Итог**: PRG — это мост между ограниченной истинной случайностью и безграничными потребностями криптографии. Не идеальный, но достаточно хороший для реального мира, где у противника нет вечности на взлом.
+### GGM — The Bridge Between PRG and PRF
 
-### PRF (Псевдослучайная функция)
+**Intuition**: if we have a PRG (can stretch randomness), can we make a PRF (a function with arbitrary input) from it?
 
-Бывает нужно не просто генерировать числа, а получать детерминированный «случайный» вывод для каждого входа. Например, для аутентификации сообщений. 
+**It turns out, yes** — via the Goldreich-Goldwasser-Micali tree.
 
-PRF — это функция, которая по ключу и произвольному сообщению выдает псевдослучайное значение. Причем зная даже миллионы пар «вход-выход», нельзя предсказать значение для нового входа без ключа. 
+**How it works**:
+- Take a PRG that turns one seed into two unpredictable ones
+- Build a binary tree where the root is our secret key
+- To compute the value for a message `x`, traverse the tree: each bit of `x` tells which branch to take
+- The result is the leaf we end up at
 
-По сути, это идеализированная версия хеш-функции с секретом. Поведение функции выглядит абсолютно случайным для внешнего наблюдателя. 
+**Simpler**: turn the sequence of message bits into a path through the tree, applying the PRG at each step.
 
-На основе PRF строятся MAC-ы, схемы выработки ключей, эффективные шифры. Это один из самых востребованных примитивов в прикладной криптографии.
+**Conclusion**: GGM is primarily a **theoretical construction** that **proves in principle** that any secure PRG can be used to build a secure PRF. In practice, more efficient constructions are used (HMAC, CMAC), but GGM is important for security proofs.
+> **Clarification:** In GGM, the tree is not built physically, but virtually — we compute the path on the fly, saving memory.
 
-***
+**PRG** is a static generator. You give it a seed, you get a long predetermined sequence. Everything is predictable in advance after initialization.
 
-### Связь PRG и PRF
+**PRF** is a function that can adapt. You give it a key and an arbitrary message — you get a unique result depending on that message.
 
-Интуитивно кажется, что PRF — нечто более сложное, чем PRG. Но оказывается, их можно свести друг к другу. 
+**GGM** creates this adaptability from a PRG via a tree. Each bit of the input message tells the PRG which branch of the tree to go to next. Thus, different messages lead to different endpoints in the tree.
 
-Если есть стойкий PRG, из него можно построить PRF — например, через дерево Голдрейха-Гольдвассера-Микали. На каждом шаге бит входной строки решает, какую ветвь PRG вычислять дальше. 
+**PRF** is needed precisely for this adaptability — so that one key can generate different unpredictable results for different inputs, rather than just producing a static data stream like a PRG.
 
-В обратную сторону — еще проще: если зафиксировать сообщение в PRF, она становится PRG. Последовательность F(k, 0), F(k, 1), F(k, 2) будет псевдослучайной. 
+it's needed for *variability*
 
-Поэтому в криптографии часто доказывают: «достаточно построить стойкий PRG, чтобы получить все остальное». Фундаментальный результат, хотя на практике используют более эффективные конструкции.
+---
+
+### The Bottom Line
+
+- **PRG** is needed to make a lot of pseudorandom data from a small random seed
+- **PRF** is needed to get deterministic but random-looking results for any inputs
+- **GGM** shows that these concepts are related: having a PRG, you can build a PRF
+
+All modern cryptography uses these ideas in one way or another. When you hear about HMAC, stream ciphers, authentication schemes — behind them are almost always either PRGs, PRFs, or their hybrids.
+
+This is not abstract theory — it's the foundation upon which everything else is built.
