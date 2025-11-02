@@ -11,8 +11,6 @@ This allows for significant acceleration in tasks where it is necessary to apply
 
 ---
 
-### Detailed Explanation Based on the Text
-
 #### 1. Key Characteristics of SIMD
 
 *   **Data Level Parallelism:** SIMD does not create parallel command threads (like in multithreading), but uses the **parallelism** of the data itself. All processed elements go through the same operation "pipeline".
