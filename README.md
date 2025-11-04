@@ -3,4 +3,4 @@
 
 **This curriculum is currently under active development and refinement**. I am constantly improving it to achieve maximum efficiency and completeness of the coverage of the material.
 
-
+Study here - selfuniversity.vercel.app
