@@ -117,6 +117,8 @@ The combination of `#pragma once` and the classic `#ifndef` provides a balanced 
 2. **`#ifndef` / `#define` - Portability and reliability**
     * **Wide portability**: The `#ifndef` directive is a C/C++ language standard that should work on any compliant compiler.
     * **Fallback protection**: Provides a reliable alternative when `#pragma once` support is limited or encounters unusual filesystem situations.
+# but macros are not safe.
+
 
 ### Performance Observations from Testing:
 
